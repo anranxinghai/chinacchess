@@ -13,6 +13,7 @@
 class CChessBoard  
 {
 public:
+	static bool isRedPieces;
 	void WinTheGame();
 	void DrawBorad(IplImage *pBack,IplImage **pImg,IplImage **pImgChoosed);
 	IplImage ** m_ChessPiecesImg;
