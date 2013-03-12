@@ -11,6 +11,7 @@
 //////////////////////////////////////////////////////////////////////
 Point CChessBoard::qipan[10][9];
 CChessPieces CChessBoard::m_ChessPieces;
+bool CChessBoard::isRedPieces;
 CChessBoard::CChessBoard()
 {
 	
@@ -69,11 +70,18 @@ void CChessBoard::OnMouse(int event, int x, int y, int flags, void *param)
 		}
 		else 
 		{
-			
-			m_ChessPieces.MovePieces(qipan,i,j);
+			if (isRedPieces)
+			{
+				m_ChessPieces.MoveRedPieces(qipan,i,j,isRedPieces);
+			}
+			else
+			{
+					m_ChessPieces.MoveBlackPieces(qipan,i,j,isRedPieces);
+			}
 			qipan[prex][prey].isChecked = false;
 		}
 		
+		//²âÊÔ¸¨Öú´úÂë£¬Êä³öÏóÆå¾ØÕó
 		for (i =0; i<10;i++)
 		{
 			for (j= 0;j < 9;j++)
@@ -133,6 +141,7 @@ void CChessBoard::InitChessBoard(char * m_WindowsName,IplImage *pBack,IplImage *
 		}
 		printf("\n");
 	}
+	isRedPieces = true;
 	cvSetMouseCallback(m_WindowsName, OnMouse);
 	DrawBorad(pBack,pImg,pImgChoosed);
 }

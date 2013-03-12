@@ -22,7 +22,8 @@ public:
 	void MoveJu		(Point qipan[10][9], int i, int j, int x, int y, int JU);
 	void MoveXiang	(Point qipan[10][9], int i, int j, int x, int y, int XIANG);
 	void MoveMa		(Point qipan[10][9], int i, int j, int x, int y, int MA);
-	void MovePieces	(Point qipan[10][9],int x,int y);
+	void MoveRedPieces(Point qipan[10][9],int x,int y,bool & isRedPieces);
+	void MoveBlackPieces(Point qipan[10][9],int x,int y,bool & isRedPieces);
 	void InitChessPieces(IplImage *pImage, int x, int y);
 	CvSize m_Size;
 	CvPoint m_Position;
