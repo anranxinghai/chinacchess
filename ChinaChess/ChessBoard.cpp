@@ -6,6 +6,7 @@
 #include "ChessBoard.h"
 #include "cv.h"
 #include "highgui.h"
+#include <Mmsystem.h>
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -24,32 +25,37 @@ CChessBoard::~CChessBoard()
 
 void CChessBoard::OnMouse(int event, int x, int y, int flags, void *param)
 {
+	
 	int i = 0,j = 0;
 	if (event == CV_EVENT_LBUTTONDOWN )
-	{
+	{		
 		//i和j为鼠标点击的地方所在矩阵的坐标值
 		printf("%d  %d\n",x,y);
 		i = abs(y - 50 + 36)/67;
 		j = abs(x - 50 + 33)/66;
 		//attention ：这里i，j对于数组来说i是行，j是列，对于棋盘来说，同样i是行，j是列
 		printf("%d  %d\n",i,j);
+		
+		
 		int prex ,prey;
 		for (prex = 0;prex<10;prex++)
 		{
 			bool flag = false;
+			//获取上次点击选中的棋子坐标
 			for (prey = 0;prey<9;prey++)
 			{
 				if (qipan[prex][prey].isChecked)
 				{
 					flag = true;
 					break;
-				}
+				}				
 			}
 			if (flag)
 			{
 				break;
 			}
 		}
+		//如果当前点击到某个棋子，并且和之前选中的棋子分别于双方
 		if (qipan[i][j].point!=0 && 
 			(abs(qipan[i][j].point + qipan[prex][prey].point) 
 			== abs(qipan[i][j].point) + abs(qipan[prex][prey].point)))
@@ -58,25 +64,64 @@ void CChessBoard::OnMouse(int event, int x, int y, int flags, void *param)
 			{
 				for (int l = 0;l < 9;l++)
 				{
+					//找到当前点击的棋子坐标，
 					if (k == i && l == j)
 					{
+						//点击某个棋子
+						sndPlaySound(".\\Sounds\\CLICK.WAV",SND_ASYNC);
 						qipan[i][j].isChecked = !qipan[i][j].isChecked;
 					}
+					//把之前选中的棋子改为为选中状态
 					else	qipan[k][l].isChecked = false;
-					
 				}
 			}
 			
 		}
-		else 
+		else if (qipan[i][j].point == 0)
 		{
 			if (isRedPieces)
 			{
-				m_ChessPieces.MoveRedPieces(qipan,i,j,isRedPieces);
+				if (m_ChessPieces.MoveRedPieces(qipan,i,j,isRedPieces))
+				{
+					//红移
+					sndPlaySound(".\\Sounds\\MOVE.WAV",SND_ASYNC);
+				}
+				
+				
 			}
 			else
 			{
-					m_ChessPieces.MoveBlackPieces(qipan,i,j,isRedPieces);
+				
+				if (m_ChessPieces.MoveBlackPieces(qipan,i,j,isRedPieces))
+				{
+					//黑移
+					sndPlaySound(".\\Sounds\\MOVE2.WAV",SND_ASYNC);
+				}
+				
+			}
+			qipan[prex][prey].isChecked = false;
+		}
+		if (qipan[i][j].point!=0 && 
+			(abs(qipan[i][j].point + qipan[prex][prey].point) 
+			< abs(qipan[i][j].point) + abs(qipan[prex][prey].point)))
+		{
+			if (isRedPieces)
+			{
+				if (m_ChessPieces.MoveRedPieces(qipan,i,j,isRedPieces))
+				{
+					//红吃
+					sndPlaySound(".\\Sounds\\CAPTURE.WAV",SND_ASYNC);
+				}		
+				
+			}
+			else
+			{
+				if (m_ChessPieces.MoveBlackPieces(qipan,i,j,isRedPieces))
+				{
+					//黑吃
+					sndPlaySound(".\\Sounds\\CAPTURE2.WAV",SND_ASYNC);
+				}
+				
 			}
 			qipan[prex][prey].isChecked = false;
 		}
@@ -187,7 +232,7 @@ void CChessBoard::DrawBorad(IplImage *pBack,IplImage **pImg,IplImage **pImgChoos
 		if (qipan[x][y].isChecked)
 		{
 			m_ChessPieces.InitChessChoosedPieces(pImgChoosed[qipan[x][y].point - 1],x,y);
-			m_ChessPieces.Draw2Back(pBack);						
+			m_ChessPieces.Draw2Back(pBack);
 		}
 	}
 	else if (qipan[x][y].point <= -1 && qipan[x][y].point >= -7)
@@ -235,7 +280,7 @@ void CChessBoard::WinTheGame()
 				isRedWin = false;
 				flag = true;
 				break;
-			}			
+			}
 		}
 		if (flag)	break;	
 	}

@@ -11,9 +11,12 @@
 #include "cv.h"
 #include "ChessBoard.h"	// Added by ClassView
 #include "ChessPieces.h"	// Added by ClassView
+#include "VFW.H"
+
 class CChessGame  
 {
 public:
+	void InitBackGroundSound();
 	IplImage * m_ChessPiecesChoosedImage[14];
 	void WinTheGame();
 	char * m_WindowsName;
