@@ -7,7 +7,8 @@
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
-
+#include "math.h"
+#include <Mmsystem.h>
 CChessPieces::CChessPieces()
 {
 	
@@ -61,7 +62,7 @@ void CChessPieces::InitChessChoosedPieces(IplImage *pImage, int x, int y)
 	m_Position.y = 47 + 0.868*1.02*y*m_PiecesImage->height-0.868*m_PiecesImage->height/2;
 }
 
-void CChessPieces::MoveBlackPieces(Point qipan[10][9],int x,int y,bool &isRedPieces)
+bool CChessPieces::MoveBlackPieces(Point qipan[10][9],int x,int y,bool &isRedPieces)
 {
 	int i,j;
 	for(i = 0;i < 10;i++)
@@ -83,43 +84,99 @@ void CChessPieces::MoveBlackPieces(Point qipan[10][9],int x,int y,bool &isRedPie
 		switch(qipan[i][j].point)
 		{
 		case BLACKMA:
-			MoveMa(qipan,i,j,x,y,BLACKMA);
+			if(MoveMa(qipan,i,j,x,y,BLACKMA))
+			{			
 			isRedPieces = true;
+			return true;
+			}
+			else 
+			{
+				isRedPieces = false;			
+				return false;
+			} 
 			break;
 		case BLACKXIANG:
-			MoveXiang(qipan,i,j,x,y,BLACKXIANG);
-			isRedPieces = true;
+			if(MoveXiang(qipan,i,j,x,y,BLACKXIANG))
+			{
+				isRedPieces = true;
+				return true;
+			}
+			else 
+			{
+				isRedPieces = false;			
+				return false;
+			}
 			break;
 		case BLACKJU:
-			MoveJu(qipan,i,j,x,y,BLACKJU);
+			if (MoveJu(qipan,i,j,x,y,BLACKJU))
+			{
 			isRedPieces = true;
+			return true;
+			}
+			else 
+			{
+				isRedPieces = false;			
+				return false;
+			}		
 			break;
 		case BLACKPAO:
-			MovePao(qipan,i,j,x,y,BLACKPAO);
-			isRedPieces = true;
+			if(MovePao(qipan,i,j,x,y,BLACKPAO))
+			{
+				isRedPieces = true;
+				return true;
+			}
+			else 
+			{
+				isRedPieces = false;			
+				return false;
+			}
 			break;
 		case BLACKSHI:
-			MoveShi(qipan,i,j,x,y,BLACKSHI);
-			isRedPieces = true;
+			if (MoveShi(qipan,i,j,x,y,BLACKSHI))
+			{
+				isRedPieces = true;
+				return true;
+			}
+			else 
 			break;
 		case BLACKZU:
-			MoveZu(qipan,i,j,x,y,BLACKZU);
-			isRedPieces = true;
+			if (MoveZu(qipan,i,j,x,y,BLACKZU))
+			{
+				isRedPieces = true;
+				return true;
+			}
+			else 
+			{
+				isRedPieces = false;
+				return false;
+			}
 			break;
 		case BLACKJIANG:
-			MoveShuai(qipan,i,j,x,y,BLACKJIANG);
-			isRedPieces = true;
+			if (MoveShuai(qipan,i,j,x,y,BLACKJIANG))
+			{
+				isRedPieces = true;
+				return true;
+			}
+			else 
+			{
+				isRedPieces = false;			
+				return false;
+			}
 			break;
 		default:
-			isRedPieces = false;
-			return;
+			{
+				isRedPieces = false;
+				return false;
+			}
+		
 		}	
 	
 }
 
-void CChessPieces::MoveRedPieces(Point qipan[10][9],int x,int y,bool &isRedPieces)
+bool CChessPieces::MoveRedPieces(Point qipan[10][9],int x,int y,bool &isRedPieces)
 {
 	int i,j;
+	//找出当前选中的象棋的x，y坐标。
 	for(i = 0;i < 10;i++)
 	{
 		bool flag = false;
@@ -140,51 +197,103 @@ void CChessPieces::MoveRedPieces(Point qipan[10][9],int x,int y,bool &isRedPiece
 		switch(qipan[i][j].point)
 		{
 		case REDMA:
-			MoveMa(qipan,i,j,x,y,REDMA);
-			isRedPieces = false;
+			if (MoveMa(qipan,i,j,x,y,REDMA))
+			{
+				isRedPieces = false;
+				return true;
+			}			
+			else 
+			{
+				isRedPieces = true;
+				return false;
+			}
 			break;
 		case REDXIANG:
-			MoveXiang(qipan,i,j,x,y,REDXIANG);
+			if (MoveXiang(qipan,i,j,x,y,REDXIANG))
+			{
 			isRedPieces = false;
+			return true;
+			}
+			else 
+			{
+				isRedPieces = true;
+				return false;
+			}
 			break;
 		case REDJU:
-			MoveJu(qipan,i,j,x,y,REDJU);
-			isRedPieces = false;
+			if (MoveJu(qipan,i,j,x,y,REDJU))
+			{
+				isRedPieces = false;
+				return true;
+			}			
+			else 
+			{
+				isRedPieces = true;
+				return false;
+			}
 			break;
 		case REDPAO:
-			MovePao(qipan,i,j,x,y,REDPAO);
-			isRedPieces = false;
+			if (MovePao(qipan,i,j,x,y,REDPAO))
+			{
+				isRedPieces = false;
+			}
+			else isRedPieces = true;
+			
 			break;
 		case REDSHI:
-			MoveShi(qipan,i,j,x,y,REDSHI);
-			isRedPieces = false;
+			if (MoveShi(qipan,i,j,x,y,REDSHI))
+			{
+				isRedPieces = false;
+				return true;
+			}
+			else 
+			{
+				isRedPieces = true;
+				return false;
+			}
 			break;
 		case REDBING:
-			MoveZu(qipan,i,j,x,y,REDBING);
-			isRedPieces = false;
+			if (MoveZu(qipan,i,j,x,y,REDBING))
+			{
+				isRedPieces = false;
+				return true;
+			}
+			else 
+			{
+				isRedPieces = true;
+				return false;
+			}
 			break;
 		case REDSHUAI:
-			MoveShuai(qipan,i,j,x,y,REDSHUAI);
-			isRedPieces = false;
+			if (MoveShuai(qipan,i,j,x,y,REDSHUAI))
+			{
+				isRedPieces = false;
+				return true;
+			}
+			else 
+			{
+				isRedPieces = true;
+				return false;
+			}
 			break;
 		default: isRedPieces = true;
-			return;
+			return false;
 		}
 	
 	
 }
 
-void CChessPieces::MoveMa(Point qipan[10][9],int i, int j,int x,int y,int MA)
+bool CChessPieces::MoveMa(Point qipan[10][9],int i, int j,int x,int y,int MA)
 {
 	//出界
 	if (x<0 || y<0 || x>9 || y>8 )
 	{
-		return;
+		return false;
 	}
 	//两个点不够成“日”字，非法的步骤
 	else if ( (abs(x - i) !=1 || abs(y - j) != 2) && ( abs(x - i) != 2 || abs(y - j) != 1))
 	{
-		return;
+		return false;
 	}
 	//目的位置在当前位置的左上方
 	else if(x<i && y <j)
@@ -193,28 +302,33 @@ void CChessPieces::MoveMa(Point qipan[10][9],int i, int j,int x,int y,int MA)
 		{
 			if (qipan[i][j-1].point!=0)
 			{
+				//调用系统的CLICK.WAV文件
+				sndPlaySound(".\\Sounds\\ILLEGAL.WAV",SND_ASYNC);
 				printf("蹩马腿！\n");
-				return;
+				return false;
 			}
 			else
 			{
 				qipan[i][j].isChecked = false;
 				qipan[i][j].point = 0;
 				qipan[x][y].point = MA;
+				return true;
 			}
 		}
 		else if ((i - x)==2 && (j - y) == 1)
 		{
 			if (qipan[i-1][j].point!=0)
 			{
+				sndPlaySound(".\\Sounds\\ILLEGAL.WAV",SND_ASYNC);
 				printf("蹩马腿！\n");
-				return;
+				return false;
 			}
 			else
 			{
 				qipan[i][j].isChecked = false;
 				qipan[i][j].point = 0;
 				qipan[x][y].point = MA;
+				return true;
 			}
 		}
 	}
@@ -225,28 +339,32 @@ void CChessPieces::MoveMa(Point qipan[10][9],int i, int j,int x,int y,int MA)
 		{
 			if (qipan[i][j+1].point!=0)
 			{
+				sndPlaySound(".\\Sounds\\ILLEGAL.WAV",SND_ASYNC);
 				printf("蹩马腿！\n");
-				return;
+				return false;
 			}
 			else
 			{
 				qipan[i][j].isChecked = false;
 				qipan[i][j].point = 0;
 				qipan[x][y].point = MA;
+				return true;
 			}
 		}
 		else if ((x - i)==2 && (y - j) == 1)
 		{
 			if (qipan[i+1][j].point!=0)
 			{
+				sndPlaySound(".\\Sounds\\ILLEGAL.WAV",SND_ASYNC);
 				printf("蹩马腿！\n");
-				return;
+				return false;
 			}
 			else
 			{
 				qipan[i][j].isChecked = false;
 				qipan[i][j].point = 0;
 				qipan[x][y].point = MA;
+				return true;
 			}
 		}
 	}
@@ -257,28 +375,32 @@ void CChessPieces::MoveMa(Point qipan[10][9],int i, int j,int x,int y,int MA)
 		{
 			if (qipan[i][j+1].point!=0)
 			{
+				sndPlaySound(".\\Sounds\\ILLEGAL.WAV",SND_ASYNC);
 				printf("蹩马腿！\n");
-				return;
+				return false;
 			}
 			else
 			{
 				qipan[i][j].isChecked = false;
 				qipan[i][j].point = 0;
 				qipan[x][y].point = MA;
+				return true;
 			}
 		}
 		else if ((i - x)==2 && (y - j) == 1)
 		{
 			if (qipan[i-1][j].point!=0)
 			{
+				sndPlaySound(".\\Sounds\\ILLEGAL.WAV",SND_ASYNC);
 				printf("蹩马腿！\n");
-				return;
+				return false;
 			}
 			else
 			{
 				qipan[i][j].isChecked = false;
 				qipan[i][j].point = 0;
 				qipan[x][y].point = MA;
+				return true;
 			}
 		}
 	}
@@ -289,53 +411,57 @@ void CChessPieces::MoveMa(Point qipan[10][9],int i, int j,int x,int y,int MA)
 		{
 			if (qipan[i][j-1].point!=0)
 			{
+				sndPlaySound(".\\Sounds\\ILLEGAL.WAV",SND_ASYNC);
 				printf("蹩马腿！\n");
-				return;
+				return false;
 			}
 			else
 			{
 				qipan[i][j].isChecked = false;
 				qipan[i][j].point = 0;
 				qipan[x][y].point = MA;
+				return true;
 			}
 		}
 		else if ((x - i)==2 && (j - y) == 1)
 		{
 			if (qipan[i+1][j].point!=0)
 			{
+				sndPlaySound(".\\Sounds\\ILLEGAL.WAV",SND_ASYNC);
 				printf("蹩马腿！\n");
-				return;
+				return false;
 			}
 			else
 			{
 				qipan[i][j].isChecked = false;
 				qipan[i][j].point = 0;
 				qipan[x][y].point = MA;
+				return true;
 			}
 		}
 	}
 }
 
 
-void CChessPieces::MoveXiang(Point qipan[10][9],int i, int j,int x,int y,int XIANG)
+bool CChessPieces::MoveXiang(Point qipan[10][9],int i, int j,int x,int y,int XIANG)
 {
 	//出界
 	if (x<0 || y<0 || x>9 || y>8 )
 	{ 
-		return;
+		return false;
 	}
 	//两个点不够成“田”字，非法的步骤
 	else if ( abs(x - i) !=2 || abs(y - j) != 2)
 	{
-		return;
+		return false;
 	}
 	if (qipan[i][j].point == REDXIANG && x>4)
 	{
-		return;
+		return false;
 	}
 	if (qipan[i][j].point == BLACKXIANG && x<5)
 	{
-		return;
+		return false;
 	}
 	//目的位置在当前位置的左上方
 	else if(x<i && y <j)
@@ -344,14 +470,16 @@ void CChessPieces::MoveXiang(Point qipan[10][9],int i, int j,int x,int y,int XIA
 		{
 			if (qipan[i-1][j-1].point!=0)
 			{
+				sndPlaySound(".\\Sounds\\ILLEGAL.WAV",SND_ASYNC);
 				printf("塞象眼！\n");
-				return;
+				return false;
 			}
 			else
 			{
 				qipan[i][j].isChecked = false;
 				qipan[i][j].point = 0;
 				qipan[x][y].point = XIANG;
+				return true;
 			}
 		}
 	}
@@ -362,14 +490,16 @@ void CChessPieces::MoveXiang(Point qipan[10][9],int i, int j,int x,int y,int XIA
 		{
 			if (qipan[i+1][j+1].point!=0)
 			{
+				sndPlaySound(".\\Sounds\\ILLEGAL.WAV",SND_ASYNC);
 				printf("塞象眼！\n");
-				return;
+				return false;
 			}
 			else
 			{
 				qipan[i][j].isChecked = false;
 				qipan[i][j].point = 0;
 				qipan[x][y].point = XIANG;
+				return true;
 			}
 		}
 	}
@@ -380,14 +510,16 @@ void CChessPieces::MoveXiang(Point qipan[10][9],int i, int j,int x,int y,int XIA
 		{
 			if (qipan[i-1][j+1].point!=0)
 			{
+				sndPlaySound(".\\Sounds\\ILLEGAL.WAV",SND_ASYNC);
 				printf("塞象眼！\n");
-				return;
+				return false;
 			}
 			else
 			{
 				qipan[i][j].isChecked = false;
 				qipan[i][j].point = 0;
 				qipan[x][y].point = XIANG;
+				return true;
 			}
 		}
 	}
@@ -398,30 +530,32 @@ void CChessPieces::MoveXiang(Point qipan[10][9],int i, int j,int x,int y,int XIA
 		{
 			if (qipan[i+1][j-1].point!=0)
 			{
+				sndPlaySound(".\\Sounds\\ILLEGAL.WAV",SND_ASYNC);
 				printf("塞象眼！\n");
-				return;
+				return false;
 			}
 			else
 			{
 				qipan[i][j].isChecked = false;
 				qipan[i][j].point = 0;
 				qipan[x][y].point = XIANG;
+				return true;
 			}
 		}
 	}
 }
 
-void CChessPieces::MoveJu(Point qipan[10][9], int i, int j, int x, int y, int JU)
+bool CChessPieces::MoveJu(Point qipan[10][9], int i, int j, int x, int y, int JU)
 {
 	//出界
 	if (x<0 || y<0 || x>9 || y>8 )
 	{
-		return;
+		return false;
 	}
 	//不在同一条直线上
 	if (i!=x && j!=y)
 	{
-		return;
+		return false;
 	}
 	//目的位置在当前位置的左方
 	else if (i == x && j > y)
@@ -431,19 +565,21 @@ void CChessPieces::MoveJu(Point qipan[10][9], int i, int j, int x, int y, int JU
 			qipan[i][j].isChecked = false;
 			qipan[i][j].point = 0;
 			qipan[x][y].point = JU;
+			return true;
 		}
 		for (int step = y+1;step < j;step++)
 		{
 			//当前位置与目标位置之间存在棋子
 			if (qipan[i][step].point!=0)
 			{
-				return;
+				return false;
 			}
 			else
 			{
 				qipan[i][j].isChecked = false;
 				qipan[i][j].point = 0;
 				qipan[x][y].point = JU;
+				return true;
 			}
 			
 		}
@@ -456,6 +592,7 @@ void CChessPieces::MoveJu(Point qipan[10][9], int i, int j, int x, int y, int JU
 			qipan[i][j].isChecked = false;
 			qipan[i][j].point = 0;
 			qipan[x][y].point = JU;
+			return true;
 			
 		}
 		for (int step = j+1;step < y;step++)
@@ -463,13 +600,14 @@ void CChessPieces::MoveJu(Point qipan[10][9], int i, int j, int x, int y, int JU
 			//当前位置与目标位置之间存在棋子
 			if (qipan[i][step].point!=0)
 			{
-				return;
+				return false;
 			}
 			else
 			{
 				qipan[i][j].isChecked = false;
 				qipan[i][j].point = 0;
 				qipan[x][y].point = JU;
+				return true;
 			}
 			
 		}
@@ -483,19 +621,21 @@ void CChessPieces::MoveJu(Point qipan[10][9], int i, int j, int x, int y, int JU
 			qipan[i][j].isChecked = false;
 			qipan[i][j].point = 0;
 			qipan[x][y].point = JU;
+			return true;
 		}
 		for (int step = i+1;step < x;step++)
 		{
 			//当前位置与目标位置之间存在棋子
 			if (qipan[step][j].point!=0)
 			{
-				return;
+				return false;
 			}
 			else
 			{
 				qipan[i][j].isChecked = false;
 				qipan[i][j].point = 0;
 				qipan[x][y].point = JU;
+				return true;
 			}
 		}
 	}
@@ -507,19 +647,21 @@ void CChessPieces::MoveJu(Point qipan[10][9], int i, int j, int x, int y, int JU
 			qipan[i][j].isChecked = false;
 			qipan[i][j].point = 0;
 			qipan[x][y].point = JU;
+			return true;
 		}
 		for (int step = x+1;step < i;step++)
 		{
 			//当前位置与目标位置之间存在棋子
 			if (qipan[step][j].point!=0)
 			{
-				return;
+				return false;
 			}
 			else
 			{
 				qipan[i][j].isChecked = false;
 				qipan[i][j].point = 0;
 				qipan[x][y].point = JU;
+				return true;
 			}
 			
 		}
@@ -527,16 +669,16 @@ void CChessPieces::MoveJu(Point qipan[10][9], int i, int j, int x, int y, int JU
 	
 }
 
-void CChessPieces::MovePao(Point qipan[][9], int i, int j, int x, int y, int PAO)
+bool CChessPieces::MovePao(Point qipan[][9], int i, int j, int x, int y, int PAO)
 {
 	if (x<0 || y<0 || x>9 || y>8 )
 	{
-		return;
+		return false;
 	}
 	//不在同一条直线上
 	if (i!=x && j!=y)
 	{
-		return;
+		return false;
 	}
 	//目的位置在当前位置的左方
 	else if (i == x && j > y)
@@ -544,10 +686,11 @@ void CChessPieces::MovePao(Point qipan[][9], int i, int j, int x, int y, int PAO
 		int num = 0;
 		if (j-y==1)
 		{
-			if(qipan[x][y].point!=0) return;
+			if(qipan[x][y].point!=0) return false;
 			qipan[i][j].isChecked = false;
 			qipan[i][j].point = 0;
 			qipan[x][y].point = PAO;
+			return true;
 		}
 		for (int step = y+1;step < j;step++)
 		{
@@ -558,17 +701,19 @@ void CChessPieces::MovePao(Point qipan[][9], int i, int j, int x, int y, int PAO
 			}
 			
 		}
-		if (num>1)
+		if (num>1 || num == 0 && qipan[x][y].point != 0)
 		{
-			return;
+			return false;
 		}
 		else
 		{
 			//移动一步，目的位置有棋子。 
-			if (num == 1 && qipan[x][y].point==0)return;
+			if (num == 1 && qipan[x][y].point==0)return false;
+
 			qipan[i][j].isChecked = false;
 			qipan[i][j].point = 0;
 			qipan[x][y].point = PAO;
+			return true;
 		}
 		
 	}
@@ -578,10 +723,11 @@ void CChessPieces::MovePao(Point qipan[][9], int i, int j, int x, int y, int PAO
 		int num = 0;
 		if (y-j==1)
 		{
-			if(qipan[x][y].point!=0) return;
+			if(qipan[x][y].point!=0) return false;
 			qipan[i][j].isChecked = false;
 			qipan[i][j].point = 0;
 			qipan[x][y].point = PAO;
+			return true;
 			
 		}
 		for (int step = j+1;step < y;step++)
@@ -592,13 +738,13 @@ void CChessPieces::MovePao(Point qipan[][9], int i, int j, int x, int y, int PAO
 				num++;
 			}			
 		}
-		if (num>1)
+		if (num>1 || num == 0 && qipan[x][y].point != 0)
 		{
-			return;
+			return false;
 		}
 		else
 		{
-			if (num == 1 && qipan[x][y].point==0)return;
+			if (num == 1 && qipan[x][y].point==0)return false;
 			qipan[i][j].isChecked = false;
 			qipan[i][j].point = 0;
 			qipan[x][y].point = PAO;
@@ -612,10 +758,11 @@ void CChessPieces::MovePao(Point qipan[][9], int i, int j, int x, int y, int PAO
 		int num = 0;
 		if (x-i==1)
 		{
-			if(qipan[x][y].point!=0) return;
+			if(qipan[x][y].point!=0) return false;
 			qipan[i][j].isChecked = false;
 			qipan[i][j].point = 0;
 			qipan[x][y].point = PAO;
+			return true;
 		}
 		for (int step = i+1;step < x;step++)
 		{
@@ -625,16 +772,17 @@ void CChessPieces::MovePao(Point qipan[][9], int i, int j, int x, int y, int PAO
 				num++;
 			}
 		}
-		if (num>1)
+		if (num>1 || num == 0 && qipan[x][y].point != 0)
 		{
-			return;
+			return false;
 		}
 		else
 		{
-			if (num == 1 && qipan[x][y].point==0)return;
+			if (num == 1 && qipan[x][y].point==0)return false;
 			qipan[i][j].isChecked = false;
 			qipan[i][j].point = 0;
 			qipan[x][y].point = PAO;
+			return true;
 		}
 	}
 	//目的位置在当前位置的上方
@@ -643,10 +791,11 @@ void CChessPieces::MovePao(Point qipan[][9], int i, int j, int x, int y, int PAO
 		int num = 0;
 		if (i-x==1)
 		{
-			if(qipan[x][y].point!=0) return;
+			if(qipan[x][y].point!=0) return false;
 			qipan[i][j].isChecked = false;
 			qipan[i][j].point = 0;
 			qipan[x][y].point = PAO;
+			return true;
 		}
 		for (int step = x+1;step < i;step++)
 		{
@@ -656,95 +805,106 @@ void CChessPieces::MovePao(Point qipan[][9], int i, int j, int x, int y, int PAO
 				num++;
 			}
 		}
-		if (num>1)
+		if (num>1 || num == 0 && qipan[x][y].point != 0)
 		{
-			return;
+			return false;
 		}
 		else
 		{
-			if (num == 1 && qipan[x][y].point==0)return;
+			if (num == 1 && qipan[x][y].point==0)return false;
 			qipan[i][j].isChecked = false;
 			qipan[i][j].point = 0;
 			qipan[x][y].point = PAO;
+			return true;
 		}
 	}
 	
 }
 
-void CChessPieces::MoveShi(Point qipan[10][9], int i, int j, int x, int y, int SHI)
+bool CChessPieces::MoveShi(Point qipan[10][9], int i, int j, int x, int y, int SHI)
 {
 	//超出九宫格
 	if (y<3||y>5)
 	{
-		return;
+		return false;
 	}
 	//在同一条直线上
 	if (i==x || j==y)
 	{
-		return;
+		return false;
 	}
 	switch(qipan[i][j].point)
 	{
 	case REDSHI:
 		{
-			if (x<0 || x>2) return;
+			if (x<0 || x>2) return false;
 			if (abs(i-x)==1 && abs(j-y)==1)
 			{
 				qipan[i][j].isChecked = false;
 				qipan[i][j].point = 0;
 				qipan[x][y].point = SHI;
+				return true;
 			}
+			else return false;
 		}
 		break;
 	case BLACKSHI:
 		{
-			if (x>9||x<7) return;
+			if (x>9||x<7) return false;
 			if (abs(i-x)==1 && abs(j-y)==1)
 			{
 				qipan[i][j].isChecked = false;
 				qipan[i][j].point = 0;
 				qipan[x][y].point = SHI;
+				return true;
 			}
+			else return false;
 		}	
 	}
 	
 }
 
-void CChessPieces::MoveZu(Point qipan[10][9], int i, int j, int x, int y, int ZU)
+bool CChessPieces::MoveZu(Point qipan[10][9], int i, int j, int x, int y, int ZU)
 {
-	if (x<0||x>9||y<0||y>8) return;
+	if (x<0||x>9||y<0||y>8) return false;
 	switch(qipan[i][j].point)
 	{
 	case REDBING:
 		{
 			//不能回头走
-			if (x<i)return;
+			if (x<i)return false;
 			if (i>4)
 			{
+				//
 				if (abs(y-j)==1 && x==i)
 				{
 					qipan[i][j].isChecked = false;
 					qipan[i][j].point = 0;
 					qipan[x][y].point = ZU;
+					return true;
 				}
 				else if (y==j && x - i==1)
 				{
 					qipan[i][j].isChecked = false;
 					qipan[i][j].point = 0;
 					qipan[x][y].point = ZU;
+					return true;
 				}
+				else return false;
 			}
 			else if (y==j && x - i==1)
 			{
 				qipan[i][j].isChecked = false;
 				qipan[i][j].point = 0;
 				qipan[x][y].point = ZU;
+				return true;
 			}
+			else return false;
 		}
 		break;
 	case BLACKZU:
 		{
-			if (x>i)return;
+			if (x>i)return false;
 			if (i<5)
 			{
 				if (abs(y-j)==1 && x==i)
@@ -752,12 +912,14 @@ void CChessPieces::MoveZu(Point qipan[10][9], int i, int j, int x, int y, int ZU
 					qipan[i][j].isChecked = false;
 					qipan[i][j].point = 0;
 					qipan[x][y].point = ZU;
+					return true;
 				}
 				else if (y==j && i - x==1)
 				{
 					qipan[i][j].isChecked = false;
 					qipan[i][j].point = 0;
 					qipan[x][y].point = ZU;
+					return true;
 				}
 			}
 			else if (y==j && i - x==1)
@@ -765,16 +927,18 @@ void CChessPieces::MoveZu(Point qipan[10][9], int i, int j, int x, int y, int ZU
 				qipan[i][j].isChecked = false;
 				qipan[i][j].point = 0;
 				qipan[x][y].point = ZU;
+				return true;
 			}
+			else return false;
 		}
 		break;
 	}
 }
 
-void CChessPieces::MoveShuai(Point qipan[10][9], int i, int j, int x, int y, int SHUAI)
+bool CChessPieces::MoveShuai(Point qipan[10][9], int i, int j, int x, int y, int SHUAI)
 {
 	//不在同一条直线上
-	if (i!=x && j!=y) return;
+	if (i!=x && j!=y) return false;
 	//两个帥之间没有棋子
 	else if (qipan[i][j].point + qipan[x][y].point == 0)
 	{
@@ -791,6 +955,7 @@ void CChessPieces::MoveShuai(Point qipan[10][9], int i, int j, int x, int y, int
 				qipan[i][j].isChecked = false;
 				qipan[i][j].point = 0;
 				qipan[x][y].point = SHUAI;
+				return true;
 			}
 		}
 		else if (i<x && j==y)
@@ -805,6 +970,7 @@ void CChessPieces::MoveShuai(Point qipan[10][9], int i, int j, int x, int y, int
 				qipan[i][j].isChecked = false;
 				qipan[i][j].point = 0;
 				qipan[x][y].point = SHUAI;
+				return true;
 			}
 		}	
 		
@@ -814,27 +980,96 @@ void CChessPieces::MoveShuai(Point qipan[10][9], int i, int j, int x, int y, int
 	case REDSHUAI:
 		{
 			//超出九宫格
-			if (x<0||x>2||y<3||y>5) return;
+			if (x<0||x>2||y<3||y>5) return false;
 			else if(abs(x-i)+abs(y-j) == 1)
 			{
 				qipan[i][j].isChecked = false;
 				qipan[i][j].point = 0;
-				qipan[x][y].point = SHUAI;
+				qipan[x][y].point = SHUAI;				
+				return true;
 			}
 		}break;
 	case BLACKJIANG:
 		{
-			if (x<7||x>9||y<3||y>5) return;
+			if (x<7||x>9||y<3||y>5) return false;
 			else if(abs(x-i)+abs(y-j) == 1)
 			{
 				qipan[i][j].isChecked = false;
 				qipan[i][j].point = 0;
-				qipan[x][y].point = SHUAI;
+				qipan[x][y].point = SHUAI;				
+				return true;
 			}
 			
 		}
 		break;
-	default:return;
+	default:return false;
 	}
 }
 
+
+void CChessPieces::SetPostionStep(int x, int y, int stepX, int stepY)
+{
+	
+	m_Position.x = 51 + x*m_PiecesImage->width-1.01*m_PiecesImage->width/2;
+	m_Position.y = 52 + 1.02*y*m_PiecesImage->height-m_PiecesImage->height/2;
+	m_StepY = stepY;//y方向步长
+	m_StepX = stepX;//x方向步长
+}
+
+void CChessPieces::CalcOriStep()
+{
+	double dx = m_DPosition.x - m_Position.x;
+	double dy = m_DPosition.y - m_Position.y;
+	double angle;
+	if (dx!=0)
+	{
+		angle = atan(abs(dy/dx));		
+	}
+	else angle = 0;
+	// (angle*180/3.14);没有括号会出现不向车头走的现象。
+	int tem =(int) (angle*180/3.14);
+	
+	if (dx<=0 && dy<=0)
+	{
+		//第一象限
+		m_StepX = (-1) * m_Step*cos(angle);
+		m_StepY = (-1) * m_Step*sin(angle);
+	}
+	else if (dx>0 && dy<0)
+	{
+		//第二象限
+		tem = 180 - tem;
+		m_StepX = m_Step*cos(angle);
+		m_StepY = (-1) * m_Step*sin(angle);
+	}
+	else if (dx> 0 && dy>0)
+	{
+		//第三象限
+		tem = 180 + tem;
+		m_StepX = m_Step*cos(angle);
+		m_StepY = m_Step*sin(angle);
+	}
+	else if (dx<0 && dy>0)
+	{
+		//第四象限
+		tem = 360 - tem;
+		m_StepX = (-1) * m_Step*cos(angle);
+		m_StepY = m_Step*sin(angle);
+	}
+}
+
+void CChessPieces::Move()
+{
+	int dx = m_DPosition.x - m_Position.x;
+	int dy = m_DPosition.y - m_Position.y;
+
+		CalcOriStep();
+		m_Position.x+= m_StepX;
+		m_Position.y+= m_StepY;
+}
+
+void CChessPieces::ChangePosition()
+{
+		m_Position.x += m_StepX;
+		m_Position.y += m_StepY;
+}

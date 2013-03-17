@@ -6,6 +6,9 @@
 #include "ChessGame.h"
 #include "cv.h"
 #include "highgui.h"
+#include <windows.h>
+#include <mmsystem.h>
+#pragma comment(lib, "WINMM.LIB")
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -23,8 +26,9 @@ CChessGame::~CChessGame()
 void CChessGame::InitGame()
 {
 	m_WindowsName = "ChessGame";
-	InitBackGround();	
+	InitBackGround();
 	InitChessPiecesImg();
+	InitBackGroundSound();
 	cvNamedWindow(m_WindowsName);
 	InitChessBoard();
 	
@@ -114,3 +118,16 @@ void CChessGame::WinTheGame()
 {
 	m_ChessBoard.WinTheGame();
 }
+
+void CChessGame::InitBackGroundSound()
+{
+	HWND m_hMCI;
+	m_hMCI = MCIWndCreate(NULL, NULL, WS_POPUP | WS_VISIBLE | MCIWNDF_NOPLAYBAR | MCIWNDF_NOMENU, ".//sounds//PINGSHANLUOYAN.WAV");
+	MCIWndPlay(m_hMCI);
+}
+
+//DEL void CChessGame::InitBackGroundSound()
+//DEL {
+//DEL 	mciSendString(TEXT("open PINGSHANLUOYAN.WAV alias mysong"), NULL, 0, NULL);
+//DEL 	mciSendString(TEXT("play MySong"), NULL, 0, NULL);
+//DEL }
