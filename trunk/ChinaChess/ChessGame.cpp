@@ -8,6 +8,7 @@
 #include "highgui.h"
 #include <windows.h>
 #include <mmsystem.h>
+#pragma   comment(lib, "vfw32.lib ")
 #pragma comment(lib, "WINMM.LIB")
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
