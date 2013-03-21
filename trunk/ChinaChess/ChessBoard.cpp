@@ -13,6 +13,7 @@
 Point CChessBoard::qipan[10][9];
 CChessPieces CChessBoard::m_ChessPieces;
 bool CChessBoard::isRedPieces;
+bool CChessBoard::m_IsOver;
 CChessBoard::CChessBoard()
 {
 	
@@ -27,7 +28,7 @@ void CChessBoard::OnMouse(int event, int x, int y, int flags, void *param)
 {
 	
 	int i = 0,j = 0;
-	if (event == CV_EVENT_LBUTTONDOWN )
+	if (event == CV_EVENT_LBUTTONDOWN && !m_IsOver)
 	{		
 		//i和j为鼠标点击的地方所在矩阵的坐标值
 		printf("%d  %d\n",x,y);
@@ -147,36 +148,8 @@ void CChessBoard::OnMouse(int event, int x, int y, int flags, void *param)
 
 void CChessBoard::InitChessBoard(char * m_WindowsName,IplImage *pBack,IplImage **pImg,IplImage **pImgChoosed)
 {	
-	qipan[0][0].point = REDJU;   qipan[0][1].point =   REDMA;  qipan[0][2].point =  REDXIANG;  qipan[0][3].point =  REDSHI;  qipan[0][4].point =  REDSHUAI;  
-	qipan[0][5].point = REDSHI;  qipan[0][6].point = REDXIANG;  qipan[0][7].point =  REDMA;  qipan[0][8].point =  REDJU;
-	
-	qipan[1][0].point = EMPTY; qipan[1][1].point = EMPTY;qipan[1][2].point = EMPTY; qipan[1][3].point = EMPTY; qipan[1][4].point = EMPTY; 
-	qipan[1][5].point = EMPTY; qipan[1][6].point = EMPTY;qipan[1][7].point = EMPTY; qipan[1][8].point = EMPTY; 
-	
-	qipan[2][0].point = EMPTY;qipan[2][1].point = REDPAO;qipan[2][2].point = EMPTY;qipan[2][3].point = EMPTY;
-	qipan[2][4].point = EMPTY;qipan[2][5].point = EMPTY;qipan[2][6].point = EMPTY;qipan[2][7].point = REDPAO;qipan[2][8].point = EMPTY; 
-	
-	qipan[3][0].point = REDBING;qipan[3][1].point = EMPTY;qipan[3][2].point = REDBING;qipan[3][3].point = EMPTY;
-	qipan[3][4].point = REDBING;qipan[3][5].point = EMPTY;qipan[3][6].point = REDBING;qipan[3][7].point = EMPTY;qipan[3][8].point = REDBING; 
-	
-	qipan[4][0].point = EMPTY;qipan[4][1].point = EMPTY;qipan[4][2].point = EMPTY;qipan[4][3].point = EMPTY;
-	qipan[4][4].point = EMPTY;qipan[4][5].point = EMPTY;qipan[4][6].point = EMPTY;qipan[4][7].point = EMPTY; qipan[4][8].point = EMPTY;
-	
-	qipan[5][0].point = EMPTY;qipan[5][1].point = EMPTY;qipan[5][2].point = EMPTY;qipan[5][3].point = EMPTY;qipan[5][4].point = EMPTY;
-	qipan[5][5].point = EMPTY;qipan[5][6].point = EMPTY;qipan[5][7].point = EMPTY;qipan[5][8].point = EMPTY; 
-	
-	qipan[6][0].point = BLACKZU;  qipan[6][1].point = EMPTY;  qipan[6][2].point = BLACKZU;qipan[6][3].point = EMPTY;  qipan[6][4].point = BLACKZU; 
-	qipan[6][5].point = EMPTY; qipan[6][6].point = BLACKZU;  qipan[6][7].point = EMPTY;qipan[6][8].point = BLACKZU; 
-	
-	qipan[7][0].point = EMPTY; qipan[7][1].point =  BLACKPAO; qipan[7][2].point =  EMPTY;qipan[7][3].point = EMPTY;qipan[7][4].point = EMPTY;
-	qipan[7][5].point = EMPTY;qipan[7][6].point = EMPTY;qipan[7][7].point = BLACKPAO;qipan[7][8].point = EMPTY; 
-	
-	qipan[8][0].point	= EMPTY;qipan[8][1].point	= EMPTY;qipan[8][2].point	= EMPTY;qipan[8][3].point	= EMPTY;qipan[8][4].point	= EMPTY;
-	qipan[8][5].point	=  EMPTY;qipan[8][6].point= EMPTY;qipan[8][7].point	= EMPTY;qipan[8][8].point	= EMPTY; 
-	
-	qipan[9][0].point = BLACKJU; qipan[9][1].point = BLACKMA; qipan[9][2].point = BLACKXIANG;qipan[9][3].point = BLACKSHI;qipan[9][4].point =  BLACKJIANG;
-	qipan[9][5].point = BLACKSHI;qipan[9][6].point = BLACKXIANG;qipan[9][7].point = BLACKMA;qipan[9][8].point = BLACKJU;
 	int i = 0,j = 0;
+	InitQIPan();
 	for (i =0; i<10;i++)
 	{
 		for (j= 0;j < 9;j++)
@@ -187,6 +160,7 @@ void CChessBoard::InitChessBoard(char * m_WindowsName,IplImage *pBack,IplImage *
 		printf("\n");
 	}
 	isRedPieces = true;
+	m_IsOver = false;
 	cvSetMouseCallback(m_WindowsName, OnMouse);
 	DrawBorad(pBack,pImg,pImgChoosed);
 }
@@ -264,9 +238,10 @@ void CChessBoard::WinTheGame()
 		}
 		if (flag)	break;	
 	}
-	if (i==3&&j==6)
+	if (i==3&&j==6 && !m_IsOver)
 	{
 		isBlackWin = true;
+		m_IsOver = true;
 		MessageBox(NULL,"黑棋获胜！", "中国象棋", MB_OK | MB_ICONSTOP);
 	}
 	
@@ -284,9 +259,43 @@ void CChessBoard::WinTheGame()
 		}
 		if (flag)	break;	
 	}
-	if(i==10 && j==6)
+	if(i==10 && j==6 && !m_IsOver)
 	{
 		isRedWin = true;
+		m_IsOver = true;
 		MessageBox(NULL,"红旗获胜！", "中国象棋", MB_OK | MB_ICONSTOP);	
 	}
+}
+
+void CChessBoard::InitQIPan()
+{
+	qipan[0][0].point = REDJU;   qipan[0][1].point =   REDMA;  qipan[0][2].point =  REDXIANG;  qipan[0][3].point =  REDSHI;  qipan[0][4].point =  REDSHUAI;  
+	qipan[0][5].point = REDSHI;  qipan[0][6].point = REDXIANG;  qipan[0][7].point =  REDMA;  qipan[0][8].point =  REDJU;
+	
+	qipan[1][0].point = EMPTY; qipan[1][1].point = EMPTY;qipan[1][2].point = EMPTY; qipan[1][3].point = EMPTY; qipan[1][4].point = EMPTY; 
+	qipan[1][5].point = EMPTY; qipan[1][6].point = EMPTY;qipan[1][7].point = EMPTY; qipan[1][8].point = EMPTY; 
+	
+	qipan[2][0].point = EMPTY;qipan[2][1].point = REDPAO;qipan[2][2].point = EMPTY;qipan[2][3].point = EMPTY;
+	qipan[2][4].point = EMPTY;qipan[2][5].point = EMPTY;qipan[2][6].point = EMPTY;qipan[2][7].point = REDPAO;qipan[2][8].point = EMPTY; 
+	
+	qipan[3][0].point = REDBING;qipan[3][1].point = EMPTY;qipan[3][2].point = REDBING;qipan[3][3].point = EMPTY;
+	qipan[3][4].point = REDBING;qipan[3][5].point = EMPTY;qipan[3][6].point = REDBING;qipan[3][7].point = EMPTY;qipan[3][8].point = REDBING; 
+	
+	qipan[4][0].point = EMPTY;qipan[4][1].point = EMPTY;qipan[4][2].point = EMPTY;qipan[4][3].point = EMPTY;
+	qipan[4][4].point = EMPTY;qipan[4][5].point = EMPTY;qipan[4][6].point = EMPTY;qipan[4][7].point = EMPTY; qipan[4][8].point = EMPTY;
+	
+	qipan[5][0].point = EMPTY;qipan[5][1].point = EMPTY;qipan[5][2].point = EMPTY;qipan[5][3].point = EMPTY;qipan[5][4].point = EMPTY;
+	qipan[5][5].point = EMPTY;qipan[5][6].point = EMPTY;qipan[5][7].point = EMPTY;qipan[5][8].point = EMPTY; 
+	
+	qipan[6][0].point = BLACKZU;  qipan[6][1].point = EMPTY;  qipan[6][2].point = BLACKZU;qipan[6][3].point = EMPTY;  qipan[6][4].point = BLACKZU; 
+	qipan[6][5].point = EMPTY; qipan[6][6].point = BLACKZU;  qipan[6][7].point = EMPTY;qipan[6][8].point = BLACKZU; 
+	
+	qipan[7][0].point = EMPTY; qipan[7][1].point =  BLACKPAO; qipan[7][2].point =  EMPTY;qipan[7][3].point = EMPTY;qipan[7][4].point = EMPTY;
+	qipan[7][5].point = EMPTY;qipan[7][6].point = EMPTY;qipan[7][7].point = BLACKPAO;qipan[7][8].point = EMPTY; 
+	
+	qipan[8][0].point	= EMPTY;qipan[8][1].point	= EMPTY;qipan[8][2].point	= EMPTY;qipan[8][3].point	= EMPTY;qipan[8][4].point	= EMPTY;
+	qipan[8][5].point	=  EMPTY;qipan[8][6].point= EMPTY;qipan[8][7].point	= EMPTY;qipan[8][8].point	= EMPTY; 
+	
+	qipan[9][0].point = BLACKJU; qipan[9][1].point = BLACKMA; qipan[9][2].point = BLACKXIANG;qipan[9][3].point = BLACKSHI;qipan[9][4].point =  BLACKJIANG;
+	qipan[9][5].point = BLACKSHI;qipan[9][6].point = BLACKXIANG;qipan[9][7].point = BLACKMA;qipan[9][8].point = BLACKJU;
 }
