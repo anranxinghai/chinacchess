@@ -13,6 +13,8 @@
 class CChessBoard  
 {
 public:
+	void InitQIPan();
+	static bool m_IsOver;
 	static bool isRedPieces;
 	void WinTheGame();
 	void DrawBorad(IplImage *pBack,IplImage **pImg,IplImage **pImgChoosed);
