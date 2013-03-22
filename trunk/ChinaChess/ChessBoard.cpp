@@ -176,16 +176,18 @@ void CChessBoard::OnMouse(int event, int x, int y, int flags, void *param)
 		}
 	}
 
+/*
 	else if(x>608 && y<30 && (event == CV_EVENT_LBUTTONDOWN || event==CV_EVENT_LBUTTONUP ))
 	{
 	//	qipan = (Point [][])m_Panel.back();
-	}
+	}*/
 }
 
 void CChessBoard::InitChessBoard(char *pWindowsName,IplImage *pBack,IplImage **pImg,IplImage **pImgChoosed,
 		IplImage **pRePlay,IplImage **pRegret,IplImage **pSound,IplImage **pReload)
 {	
 	int i = 0,j = 0;
+	qipan = new Point;
 	InitQiPan();
 	for (i =0; i<10;i++)
 	{
@@ -355,7 +357,6 @@ void CChessBoard::WinTheGame()
 
 void CChessBoard::InitQiPan()
 {
-	qipan = new Point;
 	qipan->point[0][0] = REDJU;   
 	qipan->point[0][1] =   REDMA;
 	qipan->point[0][2] =  REDXIANG;  qipan->point[0][3] =  REDSHI;  qipan->point[0][4] =  REDSHUAI;  
