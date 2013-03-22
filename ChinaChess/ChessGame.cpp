@@ -44,11 +44,9 @@ void CChessGame::InitBackGround()
 
 void CChessGame::Draw()
 {
-
 	cvCopy( m_pImgBack, m_pImgBackCopy,NULL);
 	m_ChessBoard.DrawBorad();
 	cvShowImage("ChessGame", m_pImgBackCopy);//ÏÔÊ¾Í¼Ïñ
-
 }
 
 void CChessGame::ReleaseBackGround()
@@ -67,8 +65,7 @@ void CChessGame::ReleaseGame()
 void CChessGame::RunGame()
 {
 		while (true)
-		{
-			
+		{			
 			Draw();
 			WinTheGame();
 			char key = cvWaitKey(10); //µÈ´ý°´¼ü
@@ -94,7 +91,7 @@ void CChessGame::ReleasePiecesImg()
 void CChessGame::InitChessBoard()
 {
 	m_ChessBoard.InitChessBoard(m_WindowsName,m_pImgBackCopy,m_ChessPiecesImage,m_ChessPiecesChoosedImage,
-		m_RePlay,m_Regret,m_Sound,m_Reload);
+	m_RePlay,m_Regret,m_Sound,m_Reload);
 }
 
 void CChessGame::InitChessPiecesImg()

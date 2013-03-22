@@ -1,7 +1,7 @@
 
 typedef struct{
-	int point;
-	bool isChecked;
+	int point[10][9];
+	bool isChecked[10][9];
 }Point;
 
 

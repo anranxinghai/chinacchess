@@ -20,15 +20,15 @@ public:
 	int m_StepX;
 	CvPoint m_DPosition;*/
 	void InitChessChoosedPieces(IplImage *pImage, int x, int y);
-	bool MoveShuai	(Point qipan[10][9], int i, int j, int x, int y, int SHUAI);
-	bool MoveZu		(Point qipan[10][9], int i, int j, int x, int y, int ZU);
-	bool MoveShi	(Point qipan[10][9], int i, int j, int x, int y, int SHI);
-	bool MovePao	(Point qipan[10][9], int i, int j, int x, int y, int PAO);
-	bool MoveJu		(Point qipan[10][9], int i, int j, int x, int y, int JU);
-	bool MoveXiang	(Point qipan[10][9], int i, int j, int x, int y, int XIANG);
-	bool MoveMa		(Point qipan[10][9], int i, int j, int x, int y, int MA);
-	bool MoveRedPieces(Point qipan[10][9],int x,int y,bool & isRedPieces);
-	bool MoveBlackPieces(Point qipan[10][9],int x,int y,bool & isRedPieces);
+	bool MoveShuai	(Point *qipan, int i, int j, int x, int y, int SHUAI);
+	bool MoveZu		(Point *qipan, int i, int j, int x, int y, int ZU);
+	bool MoveShi	(Point *qipan, int i, int j, int x, int y, int SHI);
+	bool MovePao	(Point *qipan, int i, int j, int x, int y, int PAO);
+	bool MoveJu		(Point *qipan, int i, int j, int x, int y, int JU);
+	bool MoveXiang	(Point *qipan, int i, int j, int x, int y, int XIANG);
+	bool MoveMa		(Point *qipan, int i, int j, int x, int y, int MA);
+	bool MoveRedPieces(Point *qipan,int x,int y,bool & isRedPieces);
+	bool MoveBlackPieces(Point *qipan,int x,int y,bool & isRedPieces);
 	void InitChessPieces(IplImage *pImage, int x, int y);
 	CvSize m_Size;
 	CvPoint m_Position;
