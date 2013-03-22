@@ -37,7 +37,7 @@ public:
 		IplImage **pRePlay,IplImage **pRegret,IplImage **pSound,IplImage **pReload);
 	CChessBoard();
 	virtual ~CChessBoard();
-	static Point qipan[10][9];
+	static Point*qipan;
 	static void OnMouse(int event, int x, int y, int flags, void* param);
 
 };
