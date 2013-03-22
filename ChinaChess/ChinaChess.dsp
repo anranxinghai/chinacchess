@@ -95,6 +95,10 @@ SOURCE=.\ChessGame.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\ChessOption.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\ChessPieces.cpp
 # End Source File
 # Begin Source File
@@ -117,6 +121,10 @@ SOURCE=.\ChessBoard.h
 # Begin Source File
 
 SOURCE=.\ChessGame.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\ChessOption.h
 # End Source File
 # Begin Source File
 

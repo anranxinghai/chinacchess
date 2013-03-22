@@ -14,6 +14,14 @@ Point CChessBoard::qipan[10][9];
 CChessPieces CChessBoard::m_ChessPieces;
 bool CChessBoard::isRedPieces;
 bool CChessBoard::m_IsOver;
+CChessOption CChessBoard::m_Option;
+char * CChessBoard::m_WindowsName;
+//vector<Point[10][9]> CChessBoard::m_Panel;
+/*
+IplImage **CChessBoard::m_Regret;
+IplImage **CChessBoard::m_Reload;
+IplImage **CChessBoard::m_RePlay;
+IplImage **CChessBoard::m_Sound;*/
 CChessBoard::CChessBoard()
 {
 	
@@ -28,7 +36,8 @@ void CChessBoard::OnMouse(int event, int x, int y, int flags, void *param)
 {
 	
 	int i = 0,j = 0;
-	if (event == CV_EVENT_LBUTTONDOWN && !m_IsOver)
+	if (event == CV_EVENT_LBUTTONDOWN && !m_IsOver &&
+		x>20 && x<628 && y>30 && y<659 )
 	{		
 		//i和j为鼠标点击的地方所在矩阵的坐标值
 		printf("%d  %d\n",x,y);
@@ -86,6 +95,7 @@ void CChessBoard::OnMouse(int event, int x, int y, int flags, void *param)
 				{
 					//红移
 					sndPlaySound(".\\Sounds\\MOVE.WAV",SND_ASYNC);
+					//m_Panel.push_back(qipan);
 				}
 				
 				
@@ -144,12 +154,27 @@ void CChessBoard::OnMouse(int event, int x, int y, int flags, void *param)
 			printf("\n");
 		}
 	}
+	if (x<20 && y<30 && event == CV_EVENT_LBUTTONDOWN || event==CV_EVENT_LBUTTONUP)
+	{
+		//m_Option.m_IsSelected = true;
+		//cvShowImage(m_WindowsName,NULL);
+		if (event == CV_EVENT_LBUTTONUP && x<20 && y<30 )
+		{
+		//	m_Option.m_IsSelected = false;
+			if (IDYES == MessageBox(NULL,"是否重新开始！", "中国象棋", MB_YESNO))
+			{
+				InitQiPan();
+				m_IsOver = false;
+			}
+		}
+	}
 }
 
-void CChessBoard::InitChessBoard(char * m_WindowsName,IplImage *pBack,IplImage **pImg,IplImage **pImgChoosed)
+void CChessBoard::InitChessBoard(char *pWindowsName,IplImage *pBack,IplImage **pImg,IplImage **pImgChoosed,
+		IplImage **pRePlay,IplImage **pRegret,IplImage **pSound,IplImage **pReload)
 {	
 	int i = 0,j = 0;
-	InitQIPan();
+	InitQiPan();
 	for (i =0; i<10;i++)
 	{
 		for (j= 0;j < 9;j++)
@@ -161,11 +186,21 @@ void CChessBoard::InitChessBoard(char * m_WindowsName,IplImage *pBack,IplImage *
 	}
 	isRedPieces = true;
 	m_IsOver = false;
+
+	m_WindowsName = pWindowsName;
+	m_RePlay = pRePlay;
+	m_Regret = pRegret;
+	m_Reload = pReload;
+	m_Sound = pSound;
+	m_ChessPiecesImg = pImg;
+	m_ChessPiecesImgChoosed = pImgChoosed;
+	m_Back = pBack;
+
 	cvSetMouseCallback(m_WindowsName, OnMouse);
-	DrawBorad(pBack,pImg,pImgChoosed);
+	DrawBorad();
 }
 
-void CChessBoard::DrawBorad(IplImage *pBack,IplImage **pImg,IplImage **pImgChoosed)
+void CChessBoard::DrawBorad()
 {
 	
 	int i,j,x = -1,y = -1;
@@ -177,8 +212,8 @@ void CChessBoard::DrawBorad(IplImage *pBack,IplImage **pImg,IplImage **pImgChoos
 			{
 				if (!qipan[i][j].isChecked)
 				{
-					m_ChessPieces.InitChessPieces(pImg[qipan[i][j].point - 1],i,j);
-					m_ChessPieces.Draw2Back(pBack);
+					m_ChessPieces.InitChessPieces(m_ChessPiecesImg[qipan[i][j].point - 1],i,j);
+					m_ChessPieces.Draw2Back(m_Back);
 				}
 				else
 				{
@@ -190,8 +225,8 @@ void CChessBoard::DrawBorad(IplImage *pBack,IplImage **pImg,IplImage **pImgChoos
 			{
 				if (!qipan[i][j].isChecked)
 				{
-					m_ChessPieces.InitChessPieces(pImg[qipan[i][j].point*(-1) + 6],i,j);
-					m_ChessPieces.Draw2Back(pBack);
+					m_ChessPieces.InitChessPieces(m_ChessPiecesImg[qipan[i][j].point*(-1) + 6],i,j);
+					m_ChessPieces.Draw2Back(m_Back);
 				}
 				else
 				{
@@ -201,23 +236,62 @@ void CChessBoard::DrawBorad(IplImage *pBack,IplImage **pImg,IplImage **pImgChoos
 			}
 		}
 	}
+	//将选中的棋子最后绘制，实现选中棋子在其他棋子之上的感觉
 	if (qipan[x][y].point >= 1 && qipan[x][y].point <= 7)
 	{
 		if (qipan[x][y].isChecked)
 		{
-			m_ChessPieces.InitChessChoosedPieces(pImgChoosed[qipan[x][y].point - 1],x,y);
-			m_ChessPieces.Draw2Back(pBack);
+			m_ChessPieces.InitChessChoosedPieces(m_ChessPiecesImgChoosed[qipan[x][y].point - 1],x,y);
+			m_ChessPieces.Draw2Back(m_Back);
 		}
 	}
 	else if (qipan[x][y].point <= -1 && qipan[x][y].point >= -7)
 	{
 		if (qipan[x][y].isChecked)
 		{
-			m_ChessPieces.InitChessChoosedPieces(pImgChoosed[qipan[x][y].point*(-1) + 6],x,y);
-			m_ChessPieces.Draw2Back(pBack);
+			m_ChessPieces.InitChessChoosedPieces(m_ChessPiecesImgChoosed[qipan[x][y].point*(-1) + 6],x,y);
+			m_ChessPieces.Draw2Back(m_Back);
 		}
-		
 	}
+	if(m_Option.m_IsSelected)
+	{
+		m_Option.InitOption(m_RePlay[1],0,0);
+	}
+	else
+	{
+		m_Option.InitOption(m_RePlay[0],0,0);
+	}
+	m_Option.Draw2Back(m_Back);
+
+	if(m_Option.m_IsSelected)
+	{
+		m_Option.InitOption(m_Regret[1],0,608);
+	}
+	else
+	{
+		m_Option.InitOption(m_Regret[0],0,608);
+	}
+	m_Option.Draw2Back(m_Back);
+
+	if(m_Option.m_IsSelected)
+	{
+		m_Option.InitOption(m_Sound[1],670,0);
+	}
+	else
+	{
+		m_Option.InitOption(m_Sound[0],670,0);
+	}
+	m_Option.Draw2Back(m_Back);
+
+	if (m_Option.m_IsSelected)
+	{
+		m_Option.InitOption(m_Reload[1],670,608);
+	}
+	else
+	{
+		m_Option.InitOption(m_Reload[0],670,608);
+	}
+	m_Option.Draw2Back(m_Back);
 }
 void CChessBoard::WinTheGame()
 {
@@ -267,7 +341,7 @@ void CChessBoard::WinTheGame()
 	}
 }
 
-void CChessBoard::InitQIPan()
+void CChessBoard::InitQiPan()
 {
 	qipan[0][0].point = REDJU;   qipan[0][1].point =   REDMA;  qipan[0][2].point =  REDXIANG;  qipan[0][3].point =  REDSHI;  qipan[0][4].point =  REDSHUAI;  
 	qipan[0][5].point = REDSHI;  qipan[0][6].point = REDXIANG;  qipan[0][7].point =  REDMA;  qipan[0][8].point =  REDJU;

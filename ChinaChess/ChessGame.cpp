@@ -46,7 +46,7 @@ void CChessGame::Draw()
 {
 
 	cvCopy( m_pImgBack, m_pImgBackCopy,NULL);
-	m_ChessBoard.DrawBorad(m_pImgBackCopy,m_ChessPiecesImage,m_ChessPiecesChoosedImage);
+	m_ChessBoard.DrawBorad();
 	cvShowImage("ChessGame", m_pImgBackCopy);//ÏÔÊ¾Í¼Ïñ
 
 }
@@ -93,7 +93,8 @@ void CChessGame::ReleasePiecesImg()
 
 void CChessGame::InitChessBoard()
 {
-	m_ChessBoard.InitChessBoard(m_WindowsName,m_pImgBackCopy,m_ChessPiecesImage,m_ChessPiecesChoosedImage);
+	m_ChessBoard.InitChessBoard(m_WindowsName,m_pImgBackCopy,m_ChessPiecesImage,m_ChessPiecesChoosedImage,
+		m_RePlay,m_Regret,m_Sound,m_Reload);
 }
 
 void CChessGame::InitChessPiecesImg()
@@ -110,6 +111,18 @@ void CChessGame::InitChessPiecesImg()
 		sprintf(filenamechoosed,".//imagechoosed//%02d.png",i);
 		m_ChessPiecesChoosedImage[i] = cvLoadImage(filenamechoosed);
 	}
+
+	m_RePlay[0] = cvLoadImage(".//image//replay.png");
+	m_RePlay[1] = cvLoadImage(".//imagechoosed//replay.png");
+	
+	m_Regret[0] = cvLoadImage(".//image//regret.png");
+	m_Regret[1] = cvLoadImage(".//imagechoosed//regret.png");
+	
+	m_Reload[0] = cvLoadImage(".//image//reload.png");
+	m_Reload[1] = cvLoadImage(".//imagechoosed//reload.png");
+	
+	m_Sound[0] = cvLoadImage(".//image//sound.png");
+	m_Sound[1] = cvLoadImage(".//imagechoosed//sound.png");
 
 }
 
