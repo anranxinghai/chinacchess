@@ -10,18 +10,19 @@
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000
-//#include <vector>
+#include <vector>
 
-//using std::vector;
+using std::vector;
 class CChessBoard  
 {
 public:
+	static int m_StepNum;
 	static CChessOption m_Option;
 	static char * m_WindowsName;
 	static void InitQiPan();
 	static bool m_IsOver;
 	static bool isRedPieces;
-	//static vector<Point[10][9]> m_Panel;
+	static vector<Point> m_Panel;
 	void WinTheGame();
 	void DrawBorad();
 	IplImage ** m_ChessPiecesImg;
