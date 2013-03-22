@@ -16,7 +16,8 @@ bool CChessBoard::isRedPieces;
 bool CChessBoard::m_IsOver;
 CChessOption CChessBoard::m_Option;
 char * CChessBoard::m_WindowsName;
-//vector<Point[10][9]> CChessBoard::m_Panel;
+vector<Point> CChessBoard::m_Panel;
+int CChessBoard::m_StepNum;
 /*
 IplImage **CChessBoard::m_Regret;
 IplImage **CChessBoard::m_Reload;
@@ -34,7 +35,6 @@ CChessBoard::~CChessBoard()
 
 void CChessBoard::OnMouse(int event, int x, int y, int flags, void *param)
 {
-	
 	int i = 0,j = 0;
 	if (event == CV_EVENT_LBUTTONDOWN && !m_IsOver &&
 		x>20 && x<628 && y>30 && y<659 )
@@ -58,7 +58,7 @@ void CChessBoard::OnMouse(int event, int x, int y, int flags, void *param)
 				{
 					flag = true;
 					break;
-				}				
+				}
 			}
 			if (flag)
 			{
@@ -93,9 +93,13 @@ void CChessBoard::OnMouse(int event, int x, int y, int flags, void *param)
 			{
 				if (m_ChessPieces.MoveRedPieces(qipan,i,j,isRedPieces))
 				{
+
 					//ºìÒÆ
+				//	Point tem;
+				//	tem = qipan;
 					sndPlaySound(".\\Sounds\\MOVE.WAV",SND_ASYNC);
-					//m_Panel.push_back(qipan);
+					//m_Panel.push_back(tem);
+					m_StepNum++;
 				}
 				
 				
@@ -106,14 +110,18 @@ void CChessBoard::OnMouse(int event, int x, int y, int flags, void *param)
 				if (m_ChessPieces.MoveBlackPieces(qipan,i,j,isRedPieces))
 				{
 					//ºÚÒÆ
+			//		Point tem;
+			//		tem = qipan;
 					sndPlaySound(".\\Sounds\\MOVE2.WAV",SND_ASYNC);
+			//		m_Panel.push_back(tem);
+					m_StepNum++;
 				}
 				
 			}
 			qipan[prex][prey].isChecked = false;
 		}
 		if (qipan[i][j].point!=0 && 
-			(abs(qipan[i][j].point + qipan[prex][prey].point) 
+			(abs(qipan[i][j].point + qipan[prex][prey].point)
 			< abs(qipan[i][j].point) + abs(qipan[prex][prey].point)))
 		{
 			if (isRedPieces)
@@ -122,8 +130,7 @@ void CChessBoard::OnMouse(int event, int x, int y, int flags, void *param)
 				{
 					//ºì³Ô
 					sndPlaySound(".\\Sounds\\CAPTURE.WAV",SND_ASYNC);
-				}		
-				
+				}
 			}
 			else
 			{
@@ -154,7 +161,7 @@ void CChessBoard::OnMouse(int event, int x, int y, int flags, void *param)
 			printf("\n");
 		}
 	}
-	if (x<20 && y<30 && event == CV_EVENT_LBUTTONDOWN || event==CV_EVENT_LBUTTONUP)
+	else if (x<20 && y<30 && (event == CV_EVENT_LBUTTONDOWN || event==CV_EVENT_LBUTTONUP))
 	{
 		//m_Option.m_IsSelected = true;
 		//cvShowImage(m_WindowsName,NULL);
@@ -167,6 +174,11 @@ void CChessBoard::OnMouse(int event, int x, int y, int flags, void *param)
 				m_IsOver = false;
 			}
 		}
+	}
+
+	else if(x>608 && y<30 && (event == CV_EVENT_LBUTTONDOWN || event==CV_EVENT_LBUTTONUP ))
+	{
+	//	qipan = (Point [][])m_Panel.back();
 	}
 }
 
@@ -372,4 +384,6 @@ void CChessBoard::InitQiPan()
 	
 	qipan[9][0].point = BLACKJU; qipan[9][1].point = BLACKMA; qipan[9][2].point = BLACKXIANG;qipan[9][3].point = BLACKSHI;qipan[9][4].point =  BLACKJIANG;
 	qipan[9][5].point = BLACKSHI;qipan[9][6].point = BLACKXIANG;qipan[9][7].point = BLACKMA;qipan[9][8].point = BLACKJU;
+
+	m_StepNum = 0;
 }

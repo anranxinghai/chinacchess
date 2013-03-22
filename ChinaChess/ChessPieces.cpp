@@ -669,7 +669,7 @@ bool CChessPieces::MoveJu(Point qipan[10][9], int i, int j, int x, int y, int JU
 	
 }
 
-bool CChessPieces::MovePao(Point qipan[][9], int i, int j, int x, int y, int PAO)
+bool CChessPieces::MovePao(Point qipan[10][9], int i, int j, int x, int y, int PAO)
 {
 	if (x<0 || y<0 || x>9 || y>8 )
 	{
