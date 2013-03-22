@@ -1007,69 +1007,69 @@ bool CChessPieces::MoveShuai(Point qipan[10][9], int i, int j, int x, int y, int
 }
 
 
-void CChessPieces::SetPostionStep(int x, int y, int stepX, int stepY)
-{
-	
-	m_Position.x = 51 + x*m_PiecesImage->width-1.01*m_PiecesImage->width/2;
-	m_Position.y = 52 + 1.02*y*m_PiecesImage->height-m_PiecesImage->height/2;
-	m_StepY = stepY;//y方向步长
-	m_StepX = stepX;//x方向步长
-}
+//DEL void CChessPieces::SetPostionStep(int x, int y, int stepX, int stepY)
+//DEL {
+//DEL 	
+//DEL 	m_Position.x = 51 + x*m_PiecesImage->width-1.01*m_PiecesImage->width/2;
+//DEL 	m_Position.y = 52 + 1.02*y*m_PiecesImage->height-m_PiecesImage->height/2;
+//DEL 	m_StepY = stepY;//y方向步长
+//DEL 	m_StepX = stepX;//x方向步长
+//DEL }
 
-void CChessPieces::CalcOriStep()
-{
-	double dx = m_DPosition.x - m_Position.x;
-	double dy = m_DPosition.y - m_Position.y;
-	double angle;
-	if (dx!=0)
-	{
-		angle = atan(abs(dy/dx));		
-	}
-	else angle = 0;
-	// (angle*180/3.14);没有括号会出现不向车头走的现象。
-	int tem =(int) (angle*180/3.14);
-	
-	if (dx<=0 && dy<=0)
-	{
-		//第一象限
-		m_StepX = (-1) * m_Step*cos(angle);
-		m_StepY = (-1) * m_Step*sin(angle);
-	}
-	else if (dx>0 && dy<0)
-	{
-		//第二象限
-		tem = 180 - tem;
-		m_StepX = m_Step*cos(angle);
-		m_StepY = (-1) * m_Step*sin(angle);
-	}
-	else if (dx> 0 && dy>0)
-	{
-		//第三象限
-		tem = 180 + tem;
-		m_StepX = m_Step*cos(angle);
-		m_StepY = m_Step*sin(angle);
-	}
-	else if (dx<0 && dy>0)
-	{
-		//第四象限
-		tem = 360 - tem;
-		m_StepX = (-1) * m_Step*cos(angle);
-		m_StepY = m_Step*sin(angle);
-	}
-}
+//DEL void CChessPieces::CalcOriStep()
+//DEL {
+//DEL 	double dx = m_DPosition.x - m_Position.x;
+//DEL 	double dy = m_DPosition.y - m_Position.y;
+//DEL 	double angle;
+//DEL 	if (dx!=0)
+//DEL 	{
+//DEL 		angle = atan(abs(dy/dx));		
+//DEL 	}
+//DEL 	else angle = 0;
+//DEL 	// (angle*180/3.14);没有括号会出现不向车头走的现象。
+//DEL 	int tem =(int) (angle*180/3.14);
+//DEL 	
+//DEL 	if (dx<=0 && dy<=0)
+//DEL 	{
+//DEL 		//第一象限
+//DEL 		m_StepX = (-1) * m_Step*cos(angle);
+//DEL 		m_StepY = (-1) * m_Step*sin(angle);
+//DEL 	}
+//DEL 	else if (dx>0 && dy<0)
+//DEL 	{
+//DEL 		//第二象限
+//DEL 		tem = 180 - tem;
+//DEL 		m_StepX = m_Step*cos(angle);
+//DEL 		m_StepY = (-1) * m_Step*sin(angle);
+//DEL 	}
+//DEL 	else if (dx> 0 && dy>0)
+//DEL 	{
+//DEL 		//第三象限
+//DEL 		tem = 180 + tem;
+//DEL 		m_StepX = m_Step*cos(angle);
+//DEL 		m_StepY = m_Step*sin(angle);
+//DEL 	}
+//DEL 	else if (dx<0 && dy>0)
+//DEL 	{
+//DEL 		//第四象限
+//DEL 		tem = 360 - tem;
+//DEL 		m_StepX = (-1) * m_Step*cos(angle);
+//DEL 		m_StepY = m_Step*sin(angle);
+//DEL 	}
+//DEL }
 
-void CChessPieces::Move()
-{
-	int dx = m_DPosition.x - m_Position.x;
-	int dy = m_DPosition.y - m_Position.y;
+//DEL void CChessPieces::Move()
+//DEL {
+//DEL 	int dx = m_DPosition.x - m_Position.x;
+//DEL 	int dy = m_DPosition.y - m_Position.y;
+//DEL 
+//DEL 		CalcOriStep();
+//DEL 		m_Position.x+= m_StepX;
+//DEL 		m_Position.y+= m_StepY;
+//DEL }
 
-		CalcOriStep();
-		m_Position.x+= m_StepX;
-		m_Position.y+= m_StepY;
-}
-
-void CChessPieces::ChangePosition()
-{
-		m_Position.x += m_StepX;
-		m_Position.y += m_StepY;
-}
+//DEL void CChessPieces::ChangePosition()
+//DEL {
+//DEL 		m_Position.x += m_StepX;
+//DEL 		m_Position.y += m_StepY;
+//DEL }

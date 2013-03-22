@@ -14,14 +14,11 @@
 class CChessPieces
 {
 public:
-	void ChangePosition();
-	void Move();
+/*
 	int m_Step;
-	void CalcOriStep();
-	void SetPostionStep(int x, int y, int stepX, int stepY);
 	int m_StepY;
 	int m_StepX;
-	CvPoint m_DPosition;
+	CvPoint m_DPosition;*/
 	void InitChessChoosedPieces(IplImage *pImage, int x, int y);
 	bool MoveShuai	(Point qipan[10][9], int i, int j, int x, int y, int SHUAI);
 	bool MoveZu		(Point qipan[10][9], int i, int j, int x, int y, int ZU);

@@ -16,6 +16,10 @@
 class CChessGame  
 {
 public:
+	IplImage * m_Sound[2];
+	IplImage * m_Reload[2];
+	IplImage * m_Regret[2];
+	IplImage * m_RePlay[2];
 	void InitBackGroundSound();
 	IplImage * m_ChessPiecesChoosedImage[14];
 	void WinTheGame();
