@@ -61,7 +61,7 @@ void CChessPieces::InitChessChoosedPieces(IplImage *pImage, int x, int y)
 	m_Position.y = 47 + 0.868*1.02*y*m_PiecesImage->height-0.868*m_PiecesImage->height/2;
 }
 
-bool CChessPieces::MoveBlackPieces(Point *qipan,int x,int y,bool &isRedPieces)
+bool CChessPieces::MoveBlackPieces(Point *qipan,int x,int y,bool &m_IsRedPieces)
 {
 	int i,j;
 	for(i = 0;i < 10;i++)
@@ -85,55 +85,55 @@ bool CChessPieces::MoveBlackPieces(Point *qipan,int x,int y,bool &isRedPieces)
 		case BLACKMA:
 			if(MoveMa(qipan,i,j,x,y,BLACKMA))
 			{			
-			isRedPieces = true;
+			m_IsRedPieces = true;
 			return true;
 			}
 			else 
 			{
-				isRedPieces = false;			
+				m_IsRedPieces = false;			
 				return false;
 			} 
 			break;
 		case BLACKXIANG:
 			if(MoveXiang(qipan,i,j,x,y,BLACKXIANG))
 			{
-				isRedPieces = true;
+				m_IsRedPieces = true;
 				return true;
 			}
 			else 
 			{
-				isRedPieces = false;			
+				m_IsRedPieces = false;			
 				return false;
 			}
 			break;
 		case BLACKJU:
 			if (MoveJu(qipan,i,j,x,y,BLACKJU))
 			{
-			isRedPieces = true;
+			m_IsRedPieces = true;
 			return true;
 			}
 			else 
 			{
-				isRedPieces = false;			
+				m_IsRedPieces = false;			
 				return false;
 			}		
 			break;
 		case BLACKPAO:
 			if(MovePao(qipan,i,j,x,y,BLACKPAO))
 			{
-				isRedPieces = true;
+				m_IsRedPieces = true;
 				return true;
 			}
 			else 
 			{
-				isRedPieces = false;			
+				m_IsRedPieces = false;			
 				return false;
 			}
 			break;
 		case BLACKSHI:
 			if (MoveShi(qipan,i,j,x,y,BLACKSHI))
 			{
-				isRedPieces = true;
+				m_IsRedPieces = true;
 				return true;
 			}
 			else 
@@ -141,30 +141,30 @@ bool CChessPieces::MoveBlackPieces(Point *qipan,int x,int y,bool &isRedPieces)
 		case BLACKZU:
 			if (MoveZu(qipan,i,j,x,y,BLACKZU))
 			{
-				isRedPieces = true;
+				m_IsRedPieces = true;
 				return true;
 			}
 			else 
 			{
-				isRedPieces = false;
+				m_IsRedPieces = false;
 				return false;
 			}
 			break;
 		case BLACKJIANG:
 			if (MoveShuai(qipan,i,j,x,y,BLACKJIANG))
 			{
-				isRedPieces = true;
+				m_IsRedPieces = true;
 				return true;
 			}
 			else 
 			{
-				isRedPieces = false;			
+				m_IsRedPieces = false;			
 				return false;
 			}
 			break;
 		default:
 			{
-				isRedPieces = false;
+				m_IsRedPieces = false;
 				return false;
 			}
 		
@@ -172,7 +172,7 @@ bool CChessPieces::MoveBlackPieces(Point *qipan,int x,int y,bool &isRedPieces)
 	
 }
 
-bool CChessPieces::MoveRedPieces(Point *qipan,int x,int y,bool &isRedPieces)
+bool CChessPieces::MoveRedPieces(Point *qipan,int x,int y,bool &m_IsRedPieces)
 {
 	int i,j;
 	//找出当前选中的象棋的x，y坐标。
@@ -198,84 +198,88 @@ bool CChessPieces::MoveRedPieces(Point *qipan,int x,int y,bool &isRedPieces)
 		case REDMA:
 			if (MoveMa(qipan,i,j,x,y,REDMA))
 			{
-				isRedPieces = false;
+				m_IsRedPieces = false;
 				return true;
 			}			
 			else 
 			{
-				isRedPieces = true;
+				m_IsRedPieces = true;
 				return false;
 			}
 			break;
 		case REDXIANG:
 			if (MoveXiang(qipan,i,j,x,y,REDXIANG))
 			{
-			isRedPieces = false;
+			m_IsRedPieces = false;
 			return true;
 			}
 			else 
 			{
-				isRedPieces = true;
+				m_IsRedPieces = true;
 				return false;
 			}
 			break;
 		case REDJU:
 			if (MoveJu(qipan,i,j,x,y,REDJU))
 			{
-				isRedPieces = false;
+				m_IsRedPieces = false;
 				return true;
 			}			
 			else 
 			{
-				isRedPieces = true;
+				m_IsRedPieces = true;
 				return false;
 			}
 			break;
 		case REDPAO:
 			if (MovePao(qipan,i,j,x,y,REDPAO))
 			{
-				isRedPieces = false;
+				m_IsRedPieces = false;
 			}
-			else isRedPieces = true;
+			else 
+			{
+				m_IsRedPieces = true;
+				return false;
+			}
 			
 			break;
 		case REDSHI:
 			if (MoveShi(qipan,i,j,x,y,REDSHI))
 			{
-				isRedPieces = false;
+				m_IsRedPieces = false;
 				return true;
 			}
 			else 
 			{
-				isRedPieces = true;
+				m_IsRedPieces = true;
 				return false;
 			}
 			break;
 		case REDBING:
 			if (MoveZu(qipan,i,j,x,y,REDBING))
 			{
-				isRedPieces = false;
+				m_IsRedPieces = false;
 				return true;
 			}
 			else 
 			{
-				isRedPieces = true;
+				m_IsRedPieces = true;
 				return false;
 			}
 			break;
 		case REDSHUAI:
 			if (MoveShuai(qipan,i,j,x,y,REDSHUAI))
 			{
-				isRedPieces = false;
+				m_IsRedPieces = false;
 				return true;
 			}
 			else 
 			{
-				isRedPieces = true;
+				m_IsRedPieces = true;
 				return false;
 			}
 			break;
-		default: isRedPieces = true;
+		default: m_IsRedPieces = true;
 			return false;
 		}
 	
@@ -903,7 +907,9 @@ bool CChessPieces::MoveZu(Point *qipan, int i, int j, int x, int y, int ZU)
 		break;
 	case BLACKZU:
 		{
+			//不能回头走
 			if (x>i)return false;
+			//过了河界
 			if (i<5)
 			{
 				if (abs(y-j)==1 && x==i)
@@ -920,6 +926,7 @@ bool CChessPieces::MoveZu(Point *qipan, int i, int j, int x, int y, int ZU)
 					qipan->point[x][y] = ZU;
 					return true;
 				}
+				else return false;
 			}
 			else if (y==j && i - x==1)
 			{

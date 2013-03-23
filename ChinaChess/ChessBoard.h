@@ -16,12 +16,17 @@ using std::vector;
 class CChessBoard  
 {
 public:
+	static HWND m_hMCI;
+	static void StopMusic();
+	static void PlayMusic();
+	static bool m_IsPlayMusic;
+	void InitBackGroundSound();
 	static int m_StepNum;
 	static CChessOption m_Option;
 	static char * m_WindowsName;
 	static void InitQiPan();
 	static bool m_IsOver;
-	static bool isRedPieces;
+	static bool m_IsRedPieces;
 	static  vector<Point> m_Panel;
 	static std::vector<Point>::iterator point;
 	void WinTheGame();

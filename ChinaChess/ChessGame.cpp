@@ -6,10 +6,7 @@
 #include "ChessGame.h"
 #include "cv.h"
 #include "highgui.h"
-#include <windows.h>
-#include <mmsystem.h>
-#pragma   comment(lib, "vfw32.lib ")
-#pragma comment(lib, "WINMM.LIB")
+
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -29,11 +26,9 @@ void CChessGame::InitGame()
 	m_WindowsName = "ChessGame";
 	InitBackGround();
 	InitChessPiecesImg();
-	InitBackGroundSound();
 	cvNamedWindow(m_WindowsName);
-	InitChessBoard();
-	
-	
+	InitChessBoard();	
+	InitBackGroundSound();	
 }
 
 void CChessGame::InitBackGround()
@@ -132,7 +127,5 @@ void CChessGame::WinTheGame()
 
 void CChessGame::InitBackGroundSound()
 {
-	HWND m_hMCI;
-	m_hMCI = MCIWndCreate(NULL, NULL, WS_POPUP | WS_VISIBLE | MCIWNDF_NOPLAYBAR | MCIWNDF_NOMENU, ".//sounds//PINGSHANLUOYAN.WAV");
-	MCIWndPlay(m_hMCI);
+	m_ChessBoard.InitBackGroundSound();
 }
