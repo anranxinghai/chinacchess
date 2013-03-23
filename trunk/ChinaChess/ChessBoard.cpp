@@ -7,6 +7,9 @@
 #include "cv.h"
 #include "highgui.h"
 #include <Mmsystem.h>
+
+#include <vector>
+using std::vector;
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -18,6 +21,7 @@ CChessOption CChessBoard::m_Option;
 char * CChessBoard::m_WindowsName;
 vector<Point> CChessBoard::m_Panel;
 int CChessBoard::m_StepNum;
+std::vector<Point>::iterator CChessBoard::point;
 /*
 IplImage **CChessBoard::m_Regret;
 IplImage **CChessBoard::m_Reload;
@@ -95,10 +99,8 @@ void CChessBoard::OnMouse(int event, int x, int y, int flags, void *param)
 				{
 
 					//红移
-				//	Point tem;
-				//	tem = qipan;
 					sndPlaySound(".\\Sounds\\MOVE.WAV",SND_ASYNC);
-					//m_Panel.push_back(tem);
+					m_Panel.push_back(*qipan);
 					m_StepNum++;
 				}
 				
@@ -110,10 +112,8 @@ void CChessBoard::OnMouse(int event, int x, int y, int flags, void *param)
 				if (m_ChessPieces.MoveBlackPieces(qipan,i,j,isRedPieces))
 				{
 					//黑移
-			//		Point tem;
-			//		tem = qipan;
 					sndPlaySound(".\\Sounds\\MOVE2.WAV",SND_ASYNC);
-			//		m_Panel.push_back(tem);
+					m_Panel.push_back(*qipan);
 					m_StepNum++;
 				}
 				
@@ -130,6 +130,7 @@ void CChessBoard::OnMouse(int event, int x, int y, int flags, void *param)
 				{
 					//红吃
 					sndPlaySound(".\\Sounds\\CAPTURE.WAV",SND_ASYNC);
+					m_Panel.push_back(*qipan);
 				}
 			}
 			else
@@ -138,6 +139,7 @@ void CChessBoard::OnMouse(int event, int x, int y, int flags, void *param)
 				{
 					//黑吃
 					sndPlaySound(".\\Sounds\\CAPTURE2.WAV",SND_ASYNC);
+					m_Panel.push_back(*qipan);
 				}
 				
 			}
@@ -171,16 +173,29 @@ void CChessBoard::OnMouse(int event, int x, int y, int flags, void *param)
 			if (IDYES == MessageBox(NULL,"是否重新开始！", "中国象棋", MB_YESNO))
 			{
 				InitQiPan();
+				m_Panel.clear();
 				m_IsOver = false;
 			}
 		}
 	}
 
-/*
-	else if(x>608 && y<30 && (event == CV_EVENT_LBUTTONDOWN || event==CV_EVENT_LBUTTONUP ))
+	else if(x>608 && y<30 && (event==CV_EVENT_LBUTTONUP))
 	{
-	//	qipan = (Point [][])m_Panel.back();
-	}*/
+		if(m_Panel.size()<=0) return;
+		
+		point = m_Panel.end();
+
+		//point++;
+		if (m_Panel.size()<3)
+		{
+			InitQiPan();
+			return;
+		}
+		point=point-2;
+		qipan = point;
+		m_Panel.pop_back();
+		
+	}
 }
 
 void CChessBoard::InitChessBoard(char *pWindowsName,IplImage *pBack,IplImage **pImg,IplImage **pImgChoosed,
@@ -389,5 +404,6 @@ void CChessBoard::InitQiPan()
 	qipan->point[9][0] = BLACKJU; qipan->point[9][1] = BLACKMA; qipan->point[9][2] = BLACKXIANG;qipan->point[9][3] = BLACKSHI;qipan->point[9][4] =  BLACKJIANG;
 	qipan->point[9][5] = BLACKSHI;qipan->point[9][6] = BLACKXIANG;qipan->point[9][7] = BLACKMA;qipan->point[9][8] = BLACKJU;
 
+	m_Panel.push_back(*qipan);	
 	m_StepNum = 0;
 }
