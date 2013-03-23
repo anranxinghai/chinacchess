@@ -352,6 +352,7 @@ void CChessBoard::WinTheGame()
 	{
 		isBlackWin = true;
 		m_IsOver = true;
+		sndPlaySound(".\\Sounds\\WIN.WAV",SND_ASYNC);
 		MessageBox(NULL,"黑棋获胜！", "中国象棋", MB_OK | MB_ICONSTOP);
 	}
 	
@@ -373,6 +374,7 @@ void CChessBoard::WinTheGame()
 	{
 		isRedWin = true;
 		m_IsOver = true;
+		sndPlaySound(".\\Sounds\\WIN.WAV",SND_ASYNC);
 		MessageBox(NULL,"红旗获胜！", "中国象棋", MB_OK | MB_ICONSTOP);	
 	}
 }
