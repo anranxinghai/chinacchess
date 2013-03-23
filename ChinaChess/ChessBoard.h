@@ -22,7 +22,8 @@ public:
 	static void InitQiPan();
 	static bool m_IsOver;
 	static bool isRedPieces;
-	static vector<Point> m_Panel;
+	static  vector<Point> m_Panel;
+	static std::vector<Point>::iterator point;
 	void WinTheGame();
 	void DrawBorad();
 	IplImage ** m_ChessPiecesImg;
