@@ -6,7 +6,11 @@
 #include "ChessBoard.h"
 #include "cv.h"
 #include "highgui.h"
-#include <Mmsystem.h>
+#include <vfw.h>
+#pragma   comment(lib, "vfw32.lib ")
+#pragma comment(lib, "WINMM.LIB")
+#include <windows.h>
+#include <mmsystem.h>
 
 #include <vector>
 using std::vector;
@@ -15,13 +19,15 @@ using std::vector;
 //////////////////////////////////////////////////////////////////////
 Point *CChessBoard::qipan;
 CChessPieces CChessBoard::m_ChessPieces;
-bool CChessBoard::isRedPieces;
+bool CChessBoard::m_IsRedPieces;
 bool CChessBoard::m_IsOver;
+bool CChessBoard::m_IsPlayMusic;
 CChessOption CChessBoard::m_Option;
 char * CChessBoard::m_WindowsName;
 vector<Point> CChessBoard::m_Panel;
 int CChessBoard::m_StepNum;
 std::vector<Point>::iterator CChessBoard::point;
+HWND CChessBoard::m_hMCI;
 /*
 IplImage **CChessBoard::m_Regret;
 IplImage **CChessBoard::m_Reload;
@@ -69,7 +75,8 @@ void CChessBoard::OnMouse(int event, int x, int y, int flags, void *param)
 				break;
 			}
 		}
-		//如果当前点击到某个棋子，并且和之前选中的棋子分别于双方
+		//if (prex == 10 && prey ==9) return;
+		//如果当前点击到某个棋子，并且和之前选中的棋子分别于双方,  吃子
 		if (qipan->point[i][j]!=0 && 
 			(abs(qipan->point[i][j] + qipan->point[prex][prey]) 
 			== abs(qipan->point[i][j]) + abs(qipan->point[prex][prey])))
@@ -93,9 +100,9 @@ void CChessBoard::OnMouse(int event, int x, int y, int flags, void *param)
 		}
 		else if (qipan->point[i][j] == 0)
 		{
-			if (isRedPieces)
+			if (m_IsRedPieces)
 			{
-				if (m_ChessPieces.MoveRedPieces(qipan,i,j,isRedPieces))
+				if (m_ChessPieces.MoveRedPieces(qipan,i,j,m_IsRedPieces))
 				{
 					m_Panel.push_back(*qipan);
 					//红移
@@ -108,7 +115,7 @@ void CChessBoard::OnMouse(int event, int x, int y, int flags, void *param)
 			else
 			{
 				
-				if (m_ChessPieces.MoveBlackPieces(qipan,i,j,isRedPieces))
+				if (m_ChessPieces.MoveBlackPieces(qipan,i,j,m_IsRedPieces))
 				{
 					m_Panel.push_back(*qipan);
 					//黑移
@@ -119,13 +126,14 @@ void CChessBoard::OnMouse(int event, int x, int y, int flags, void *param)
 			}
 			qipan->isChecked[prex][prey] = false;
 		}
+		//吃子的情况。
 		if (qipan->point[i][j]!=0 && 
 			(abs(qipan->point[i][j] + qipan->point[prex][prey])
 			< abs(qipan->point[i][j]) + abs(qipan->point[prex][prey])))
 		{
-			if (isRedPieces)
+			if (m_IsRedPieces)
 			{
-				if (m_ChessPieces.MoveRedPieces(qipan,i,j,isRedPieces))
+				if (m_ChessPieces.MoveRedPieces(qipan,i,j,m_IsRedPieces))
 				{
 					m_Panel.push_back(*qipan);
 					//红吃
@@ -135,7 +143,7 @@ void CChessBoard::OnMouse(int event, int x, int y, int flags, void *param)
 			}
 			else
 			{
-				if (m_ChessPieces.MoveBlackPieces(qipan,i,j,isRedPieces))
+				if (m_ChessPieces.MoveBlackPieces(qipan,i,j,m_IsRedPieces))
 				{
 					m_Panel.push_back(*qipan);
 					//黑吃
@@ -146,6 +154,7 @@ void CChessBoard::OnMouse(int event, int x, int y, int flags, void *param)
 			}
 			qipan->isChecked[prex][prey] = false;
 		}
+		else return;
 		
 		//测试辅助代码，输出象棋矩阵
 		for (i =0; i<10;i++)
@@ -197,30 +206,38 @@ void CChessBoard::OnMouse(int event, int x, int y, int flags, void *param)
 			}
 		}
 		m_IsOver = false;
-		isRedPieces = !isRedPieces;
+		m_IsRedPieces = !m_IsRedPieces; 
 		m_Panel.pop_back();
 		point = m_Panel.end()-1;
 		qipan = point;
 
 		if (m_Panel.size()<2)
 		{
-		//	InitQiPan();			
+		//	InitQiPan();
 			m_Panel.clear();
 			//return;
 		}
 		//point++;
-		
-		
+	}
+	else if (x<30 && y>670 && event==CV_EVENT_LBUTTONUP)
+	{
+		m_IsPlayMusic = !m_IsPlayMusic;
+		if (m_IsPlayMusic)
+		{
+			PlayMusic();
+		}
+		else StopMusic();
+		printf("%d %d\n",x,y);
 	}
 }
 
 void CChessBoard::InitChessBoard(char *pWindowsName,IplImage *pBack,IplImage **pImg,IplImage **pImgChoosed,
 		IplImage **pRePlay,IplImage **pRegret,IplImage **pSound,IplImage **pReload)
-{	
+{
 	int i = 0,j = 0;
 	qipan = new Point;
 	InitQiPan();
-	isRedPieces = true;
+	m_IsRedPieces = true;
 	m_IsOver = false;
 
 	m_WindowsName = pWindowsName;
@@ -231,7 +248,7 @@ void CChessBoard::InitChessBoard(char *pWindowsName,IplImage *pBack,IplImage **p
 	m_ChessPiecesImg = pImg;
 	m_ChessPiecesImgChoosed = pImgChoosed;
 	m_Back = pBack;
-
+	m_IsPlayMusic = true;
 	cvSetMouseCallback(m_WindowsName, OnMouse);
 	//DrawBorad();
 }
@@ -425,4 +442,23 @@ void CChessBoard::InitQiPan()
 
 	m_Panel.push_back(*qipan);	
 	m_StepNum = 0;
+}
+
+void CChessBoard::InitBackGroundSound()
+{
+	
+	m_hMCI = MCIWndCreate(NULL, NULL, WS_POPUP | WS_VISIBLE | MCIWNDF_NOPLAYBAR | MCIWNDF_NOMENU, ".//sounds//PINGSHANLUOYAN.WAV");
+	MCIWndPlay(m_hMCI);
+}
+
+
+
+void CChessBoard::PlayMusic()
+{
+	MCIWndPlay(m_hMCI);
+}
+
+void CChessBoard::StopMusic()
+{
+	MCIWndPause(m_hMCI);
 }

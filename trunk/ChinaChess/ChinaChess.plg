@@ -6,7 +6,7 @@
 --------------------Configuration: ChinaChess - Win32 Debug--------------------
 </h3>
 <h3>Command Lines</h3>
-Creating temporary file "C:\Users\ANRANX~1\AppData\Local\Temp\RSP35BB.tmp" with contents
+Creating temporary file "C:\Users\ANRANX~1\AppData\Local\Temp\RSPFA7.tmp" with contents
 [
 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib cxcore.lib cv.lib ml.lib cvaux.lib highgui.lib cvcam.lib winmm.lib vfw32.lib /nologo /subsystem:console /incremental:yes /pdb:"Debug/ChinaChess.pdb" /debug /machine:I386 /out:"Debug/ChinaChess.exe" /pdbtype:sept 
 .\Debug\ChessBoard.obj
@@ -16,7 +16,7 @@ kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32
 .\Debug\ChinaChess.obj
 .\Debug\StdAfx.obj
 ]
-Creating command line "link.exe @C:\Users\ANRANX~1\AppData\Local\Temp\RSP35BB.tmp"
+Creating command line "link.exe @C:\Users\ANRANX~1\AppData\Local\Temp\RSPFA7.tmp"
 <h3>Output Window</h3>
 Linking...
 Creating command line "bscmake.exe /nologo /o"Debug/ChinaChess.bsc"  .\Debug\StdAfx.sbr .\Debug\ChessBoard.sbr .\Debug\ChessGame.sbr .\Debug\ChessOption.sbr .\Debug\ChessPieces.sbr .\Debug\ChinaChess.sbr"
