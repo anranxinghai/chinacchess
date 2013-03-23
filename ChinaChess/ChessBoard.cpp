@@ -97,10 +97,9 @@ void CChessBoard::OnMouse(int event, int x, int y, int flags, void *param)
 			{
 				if (m_ChessPieces.MoveRedPieces(qipan,i,j,isRedPieces))
 				{
-
+					m_Panel.push_back(*qipan);
 					//ºìÒÆ
 					sndPlaySound(".\\Sounds\\MOVE.WAV",SND_ASYNC);
-					m_Panel.push_back(*qipan);
 					m_StepNum++;
 				}
 				
@@ -111,9 +110,9 @@ void CChessBoard::OnMouse(int event, int x, int y, int flags, void *param)
 				
 				if (m_ChessPieces.MoveBlackPieces(qipan,i,j,isRedPieces))
 				{
+					m_Panel.push_back(*qipan);
 					//ºÚÒÆ
 					sndPlaySound(".\\Sounds\\MOVE2.WAV",SND_ASYNC);
-					m_Panel.push_back(*qipan);
 					m_StepNum++;
 				}
 				
@@ -128,18 +127,20 @@ void CChessBoard::OnMouse(int event, int x, int y, int flags, void *param)
 			{
 				if (m_ChessPieces.MoveRedPieces(qipan,i,j,isRedPieces))
 				{
+					m_Panel.push_back(*qipan);
 					//ºì³Ô
 					sndPlaySound(".\\Sounds\\CAPTURE.WAV",SND_ASYNC);
-					m_Panel.push_back(*qipan);
+					
 				}
 			}
 			else
 			{
 				if (m_ChessPieces.MoveBlackPieces(qipan,i,j,isRedPieces))
 				{
+					m_Panel.push_back(*qipan);
 					//ºÚ³Ô
 					sndPlaySound(".\\Sounds\\CAPTURE2.WAV",SND_ASYNC);
-					m_Panel.push_back(*qipan);
+					
 				}
 				
 			}
@@ -179,21 +180,36 @@ void CChessBoard::OnMouse(int event, int x, int y, int flags, void *param)
 		}
 	}
 
-	else if(x>608 && y<30 && (event==CV_EVENT_LBUTTONUP))
+	else if(x>608 && y<30 && event==CV_EVENT_LBUTTONUP)
 	{
 		if(m_Panel.size()<=0) return;
-		
-		point = m_Panel.end();
-
-		//point++;
-		if (m_Panel.size()<3)
+		for (point = m_Panel.begin();point < m_Panel.end();point++)
 		{
-			InitQiPan();
-			return;
+			printf("Vector[%d]ÖÐµÄÊý¾Ý£º\n\n",m_Panel.size());
+			for (int i =0; i<10;i++)
+			{
+				for (int j= 0;j < 9;j++)
+				{
+					qipan->isChecked[i][j] = false;
+					printf("%d\t", qipan->point[i][j]);
+				}
+				printf("\n");
+			}
 		}
-		point=point-2;
-		qipan = point;
+		m_IsOver = false;
+		isRedPieces = !isRedPieces;
 		m_Panel.pop_back();
+		point = m_Panel.end()-1;
+		qipan = point;
+
+		if (m_Panel.size()<2)
+		{
+		//	InitQiPan();			
+			m_Panel.clear();
+			//return;
+		}
+		//point++;
+		
 		
 	}
 }
@@ -204,15 +220,6 @@ void CChessBoard::InitChessBoard(char *pWindowsName,IplImage *pBack,IplImage **p
 	int i = 0,j = 0;
 	qipan = new Point;
 	InitQiPan();
-	for (i =0; i<10;i++)
-	{
-		for (j= 0;j < 9;j++)
-		{
-			qipan->isChecked[i][j] = false;
-			printf("%d\t", qipan->point[i][j]);
-		}
-		printf("\n");
-	}
 	isRedPieces = true;
 	m_IsOver = false;
 
@@ -226,7 +233,7 @@ void CChessBoard::InitChessBoard(char *pWindowsName,IplImage *pBack,IplImage **p
 	m_Back = pBack;
 
 	cvSetMouseCallback(m_WindowsName, OnMouse);
-	DrawBorad();
+	//DrawBorad();
 }
 
 void CChessBoard::DrawBorad()
@@ -403,6 +410,16 @@ void CChessBoard::InitQiPan()
 	
 	qipan->point[9][0] = BLACKJU; qipan->point[9][1] = BLACKMA; qipan->point[9][2] = BLACKXIANG;qipan->point[9][3] = BLACKSHI;qipan->point[9][4] =  BLACKJIANG;
 	qipan->point[9][5] = BLACKSHI;qipan->point[9][6] = BLACKXIANG;qipan->point[9][7] = BLACKMA;qipan->point[9][8] = BLACKJU;
+
+	for (int i =0; i<10;i++)
+	{
+		for (int j= 0;j < 9;j++)
+		{
+			qipan->isChecked[i][j] = false;
+			printf("%d\t", qipan->point[i][j]);
+		}
+		printf("\n");
+	}
 
 	m_Panel.push_back(*qipan);	
 	m_StepNum = 0;

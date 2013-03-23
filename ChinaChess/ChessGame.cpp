@@ -136,9 +136,3 @@ void CChessGame::InitBackGroundSound()
 	m_hMCI = MCIWndCreate(NULL, NULL, WS_POPUP | WS_VISIBLE | MCIWNDF_NOPLAYBAR | MCIWNDF_NOMENU, ".//sounds//PINGSHANLUOYAN.WAV");
 	MCIWndPlay(m_hMCI);
 }
-
-//DEL void CChessGame::InitBackGroundSound()
-//DEL {
-//DEL 	mciSendString(TEXT("open PINGSHANLUOYAN.WAV alias mysong"), NULL, 0, NULL);
-//DEL 	mciSendString(TEXT("play MySong"), NULL, 0, NULL);
-//DEL }
