@@ -211,9 +211,9 @@ void CChessBoard::OnMouse(int event, int x, int y, int flags, void *param)
 		point = m_Panel.end()-1;
 		qipan = point;
 
-		if (m_Panel.size()<2)
+		if (m_Panel.size()<1)
 		{
-		//	InitQiPan();
+			InitQiPan();
 			m_Panel.clear();
 			//return;
 		}
@@ -237,7 +237,7 @@ void CChessBoard::InitChessBoard(char *pWindowsName,IplImage *pBack,IplImage **p
 	int i = 0,j = 0;
 	qipan = new Point;
 	InitQiPan();
-	m_IsRedPieces = true;
+//	m_IsRedPieces = true;
 	m_IsOver = false;
 
 	m_WindowsName = pWindowsName;
@@ -439,7 +439,7 @@ void CChessBoard::InitQiPan()
 		}
 		printf("\n");
 	}
-
+	m_IsRedPieces = true;
 	m_Panel.push_back(*qipan);	
 	m_StepNum = 0;
 }
