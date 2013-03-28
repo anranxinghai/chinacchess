@@ -460,5 +460,5 @@ void CChessBoard::PlayMusic()
 
 void CChessBoard::StopMusic()
 {
-	MCIWndPause(m_hMCI);
+	MCIWndStop(m_hMCI);
 }
