@@ -16,6 +16,9 @@ using std::vector;
 class CChessBoard  
 {
 public:
+	static bool m_IsSave;
+	static void GetQiPan();
+	static void SaveToFile();
 	static uchar rB;
 	static uchar gB;
 	static uchar bB;
