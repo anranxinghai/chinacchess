@@ -17,6 +17,15 @@ using std::vector;
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
+
+uchar CChessBoard::bB;
+uchar CChessBoard::bS;
+uchar CChessBoard::gB;
+uchar CChessBoard::gS;
+uchar CChessBoard::rS;
+uchar CChessBoard::rB;
+
+IplImage *CChessBoard::m_Back;
 IplImage *CChessBoard::m_StartBack;
 float CChessBoard::m_Insist;
 Point *CChessBoard::qipan;
@@ -53,10 +62,13 @@ void CChessBoard::OnMouse(int event, int x, int y, int flags, void *param)
 		x>251 && x<386 && y>245 && y<311 && !m_IsStart)
 	{
 		m_IsStart = true;
-	/*	while(true)
+		/*while(m_Insist<50)
 		{
-			ChangeToGame();
+			
+				ChangeToGame();
 		}*/
+		//延时1秒
+		Sleep(1000);
 	}
 	else if (event == CV_EVENT_LBUTTONDOWN && !m_IsOver &&
 		x>251 && x<386 && y>377 && y<443 && !m_IsStart)
@@ -281,14 +293,13 @@ void CChessBoard::InitChessBoard(char *pWindowsName,IplImage *pBack,IplImage **p
 	cvSetMouseCallback(m_WindowsName, OnMouse);
 	//DrawBorad();
 
-
-	uchar bS = CV_IMAGE_ELEM(m_StartBack,uchar,i,j*3);
-	uchar gS = CV_IMAGE_ELEM(m_StartBack,uchar,i,j*3+1);
-	uchar rS = CV_IMAGE_ELEM(m_StartBack,uchar,i,j*3+2);
+	bS = CV_IMAGE_ELEM(m_StartBack,uchar,i,j*3);
+	gS = CV_IMAGE_ELEM(m_StartBack,uchar,i,j*3+1);
+	rS = CV_IMAGE_ELEM(m_StartBack,uchar,i,j*3+2);
 	
-	uchar bB = CV_IMAGE_ELEM(m_Back,uchar,i,j*3);
-	uchar gB = CV_IMAGE_ELEM(m_Back,uchar,i,j*3+1);
-	uchar rB = CV_IMAGE_ELEM(m_Back,uchar,i,j*3+2);
+	bB = CV_IMAGE_ELEM(m_Back,uchar,i,j*3);
+	gB = CV_IMAGE_ELEM(m_Back,uchar,i,j*3+1);
+	rB = CV_IMAGE_ELEM(m_Back,uchar,i,j*3+2);
 }
 
 void CChessBoard::DrawBorad()
@@ -427,7 +438,7 @@ void CChessBoard::WinTheGame()
 				break;
 			}
 		}
-		if (flag)	break;	
+		if (flag)	break;
 	}
 	if(i==10 && j==6 && !m_IsOver)
 	{
@@ -516,6 +527,7 @@ void CChessBoard::DrawStart()
 	}
 }
 
+//此函数值起到了延时的功能,但是被取消。
 void CChessBoard::ChangeToGame()
 {
 	for (int i = 0; i<m_StartBack->height;i++)
@@ -524,17 +536,16 @@ void CChessBoard::ChangeToGame()
 		{
 	
 			
-			CV_IMAGE_ELEM(m_StartBack,uchar,i,j*3) = CV_IMAGE_ELEM(m_StartBack,uchar,i,j*3)*m_Insist/100;
-				//+ CV_IMAGE_ELEM(m_Back,uchar,i,j*3)*(100-m_Insist)/100;
-			CV_IMAGE_ELEM(m_StartBack,uchar,i,j*3+1) = CV_IMAGE_ELEM(m_StartBack,uchar,i,j*3+1)*m_Insist/100;
-				//+ CV_IMAGE_ELEM(m_Back,uchar,i,j*3+1)*(100-m_Insist)/100;
-			CV_IMAGE_ELEM(m_StartBack,uchar,i,j*3+2) = CV_IMAGE_ELEM(m_StartBack,uchar,i,j*3+2)*m_Insist/100;
-			//	+ CV_IMAGE_ELEM(m_Back,uchar,i,j*3+2)*(100-m_Insist)/100;
+			CV_IMAGE_ELEM( m_Back, uchar, j, i*3 + 0 ) = CV_IMAGE_ELEM( m_Back, uchar, j, i*3 + 0 )*(m_Insist)/100;// + rB*(100-m_Insist)/100;
+			CV_IMAGE_ELEM( m_Back, uchar, j, i*3 + 1 ) = CV_IMAGE_ELEM( m_Back, uchar, j, i*3 + 1 )*(m_Insist)/100 ;//+ gB*(100-m_Insist)/100;
+			CV_IMAGE_ELEM( m_Back, uchar, j, i*3 + 2 ) = CV_IMAGE_ELEM( m_Back, uchar, j, i*3 + 2 )*(m_Insist)/100 ;//+ rB*(100-m_Insist)/100;
 		}
 	}
-	cvShowImage(m_WindowsName,m_StartBack);
-	if (m_Insist<100)
+ 	cvNamedWindow("Chess",1);
+ 	cvShowImage("Chess",m_Back);
+	if (m_Insist<50)
 	{
+		Sleep(10);
 		m_Insist= m_Insist +1;
 	}
 	
