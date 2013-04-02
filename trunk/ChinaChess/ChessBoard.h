@@ -16,6 +16,14 @@ using std::vector;
 class CChessBoard  
 {
 public:
+	static float m_Insist;
+	CvPoint m_Position;
+	static void ChangeToGame();
+	void DrawStart();
+	IplImage ** m_ExitImage;
+	IplImage ** m_StartImage;
+	static IplImage * m_StartBack;
+	static bool m_IsStart;
 	static HWND m_hMCI;
 	static void StopMusic();
 	static void PlayMusic();
@@ -40,7 +48,8 @@ public:
 	IplImage ** m_Reload;
 	static CChessPieces m_ChessPieces;
 	void InitChessBoard(char *pWindowsName,IplImage *pBack,IplImage **pImg,IplImage **pImgChoosed,
-		IplImage **pRePlay,IplImage **pRegret,IplImage **pSound,IplImage **pReload);
+		IplImage **pRePlay,IplImage **pRegret,IplImage **pSound,IplImage **pReload,
+		IplImage *pStartBack,IplImage **m_StartImage,IplImage **pExitImage);
 	CChessBoard();
 	virtual ~CChessBoard();
 	static Point*qipan;

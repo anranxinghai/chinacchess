@@ -16,6 +16,12 @@
 class CChessGame  
 {
 public:
+	bool m_IsStart;
+	IplImage * m_StartBackCopy;
+	IplImage * m_StartBack;
+	IplImage * m_ExitImg[2];
+	IplImage * m_StartImg[2];
+	void InitStartGame();
 	IplImage * m_Sound[2];
 	IplImage * m_Reload[2];
 	IplImage * m_Regret[2];
@@ -26,10 +32,10 @@ public:
 	char * m_WindowsName;
 	CChessBoard m_ChessBoard;
 
-	void InitChessPiecesImg();
+	void InitImage();
 	void InitChessBoard();
 	IplImage * m_ChessPiecesImage[14];
-	void ReleasePiecesImg();	
+	void ReleaseImage();	
 	void RunGame();
 	void ReleaseGame();
 	void ReleaseBackGround();

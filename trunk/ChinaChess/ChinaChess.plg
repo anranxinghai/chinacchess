@@ -6,7 +6,23 @@
 --------------------Configuration: ChinaChess - Win32 Debug--------------------
 </h3>
 <h3>Command Lines</h3>
-Creating temporary file "C:\Users\ANRANX~1\AppData\Local\Temp\RSPD5B8.tmp" with contents
+Creating temporary file "C:\Users\ANRANX~1\AppData\Local\Temp\RSP96AC.tmp" with contents
+[
+/nologo /MLd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /FR"Debug/" /Fp"Debug/ChinaChess.pch" /Yu"stdafx.h" /Fo"Debug/" /Fd"Debug/" /FD /GZ /c 
+"C:\Users\anranxinghai\Desktop\chinacchess\ChinaChess\ChessBoard.cpp"
+"C:\Users\anranxinghai\Desktop\chinacchess\ChinaChess\ChessGame.cpp"
+"C:\Users\anranxinghai\Desktop\chinacchess\ChinaChess\ChessOption.cpp"
+"C:\Users\anranxinghai\Desktop\chinacchess\ChinaChess\ChessPieces.cpp"
+"C:\Users\anranxinghai\Desktop\chinacchess\ChinaChess\ChinaChess.cpp"
+]
+Creating command line "cl.exe @C:\Users\ANRANX~1\AppData\Local\Temp\RSP96AC.tmp" 
+Creating temporary file "C:\Users\ANRANX~1\AppData\Local\Temp\RSP96AD.tmp" with contents
+[
+/nologo /MLd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /FR"Debug/" /Fp"Debug/ChinaChess.pch" /Yc"stdafx.h" /Fo"Debug/" /Fd"Debug/" /FD /GZ /c 
+"C:\Users\anranxinghai\Desktop\chinacchess\ChinaChess\StdAfx.cpp"
+]
+Creating command line "cl.exe @C:\Users\ANRANX~1\AppData\Local\Temp\RSP96AD.tmp" 
+Creating temporary file "C:\Users\ANRANX~1\AppData\Local\Temp\RSP96BE.tmp" with contents
 [
 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib cxcore.lib cv.lib ml.lib cvaux.lib highgui.lib cvcam.lib winmm.lib vfw32.lib /nologo /subsystem:console /incremental:yes /pdb:"Debug/ChinaChess.pdb" /debug /machine:I386 /out:"Debug/ChinaChess.exe" /pdbtype:sept 
 .\Debug\ChessBoard.obj
@@ -16,9 +32,33 @@ kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32
 .\Debug\ChinaChess.obj
 .\Debug\StdAfx.obj
 ]
-Creating command line "link.exe @C:\Users\ANRANX~1\AppData\Local\Temp\RSPD5B8.tmp"
+Creating command line "link.exe @C:\Users\ANRANX~1\AppData\Local\Temp\RSP96BE.tmp"
 <h3>Output Window</h3>
+Compiling...
+StdAfx.cpp
+Compiling...
+ChessGame.cpp
+ChessOption.cpp
+ChessPieces.cpp
+C:\Users\anranxinghai\Desktop\chinacchess\ChinaChess\ChessPieces.cpp(52) : warning C4244: '=' : conversion from 'double' to 'int', possible loss of data
+C:\Users\anranxinghai\Desktop\chinacchess\ChinaChess\ChessPieces.cpp(53) : warning C4244: '=' : conversion from 'double' to 'int', possible loss of data
+C:\Users\anranxinghai\Desktop\chinacchess\ChinaChess\ChessPieces.cpp(60) : warning C4244: '=' : conversion from 'double' to 'int', possible loss of data
+C:\Users\anranxinghai\Desktop\chinacchess\ChinaChess\ChessPieces.cpp(61) : warning C4244: '=' : conversion from 'double' to 'int', possible loss of data
+ChinaChess.cpp
+Generating Code...
+C:\Users\anranxinghai\Desktop\chinacchess\ChinaChess\ChessPieces.cpp(173) : warning C4715: 'CChessPieces::MoveBlackPieces' : not all control paths return a value
+C:\Users\anranxinghai\Desktop\chinacchess\ChinaChess\ChessPieces.cpp(287) : warning C4715: 'CChessPieces::MoveRedPieces' : not all control paths return a value
+C:\Users\anranxinghai\Desktop\chinacchess\ChinaChess\ChessPieces.cpp(446) : warning C4715: 'CChessPieces::MoveMa' : not all control paths return a value
+C:\Users\anranxinghai\Desktop\chinacchess\ChinaChess\ChessPieces.cpp(549) : warning C4715: 'CChessPieces::MoveXiang' : not all control paths return a value
+C:\Users\anranxinghai\Desktop\chinacchess\ChinaChess\ChessPieces.cpp(673) : warning C4715: 'CChessPieces::MoveJu' : not all control paths return a value
+C:\Users\anranxinghai\Desktop\chinacchess\ChinaChess\ChessPieces.cpp(825) : warning C4715: 'CChessPieces::MovePao' : not all control paths return a value
+C:\Users\anranxinghai\Desktop\chinacchess\ChinaChess\ChessPieces.cpp(868) : warning C4715: 'CChessPieces::MoveShi' : not all control paths return a value
+C:\Users\anranxinghai\Desktop\chinacchess\ChinaChess\ChessPieces.cpp(942) : warning C4715: 'CChessPieces::MoveZu' : not all control paths return a value
+C:\Users\anranxinghai\Desktop\chinacchess\ChinaChess\ChessPieces.cpp(1013) : warning C4715: 'CChessPieces::MoveShuai' : not all control paths return a value
+Skipping... (no relevant changes detected)
+ChessBoard.cpp
 Linking...
+LINK : LNK6004: Debug/ChinaChess.exe not found or not built by the last incremental link; performing full link
 Creating command line "bscmake.exe /nologo /o"Debug/ChinaChess.bsc"  .\Debug\StdAfx.sbr .\Debug\ChessBoard.sbr .\Debug\ChessGame.sbr .\Debug\ChessOption.sbr .\Debug\ChessPieces.sbr .\Debug\ChinaChess.sbr"
 Creating browse info file...
 <h3>Output Window</h3>
@@ -26,7 +66,7 @@ Creating browse info file...
 
 
 <h3>Results</h3>
-ChinaChess.exe - 0 error(s), 0 warning(s)
+ChinaChess.exe - 0 error(s), 13 warning(s)
 </pre>
 </body>
 </html>
