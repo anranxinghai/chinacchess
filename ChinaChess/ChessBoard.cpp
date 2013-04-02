@@ -17,11 +17,14 @@ using std::vector;
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
+IplImage *CChessBoard::m_StartBack;
+float CChessBoard::m_Insist;
 Point *CChessBoard::qipan;
 CChessPieces CChessBoard::m_ChessPieces;
 bool CChessBoard::m_IsRedPieces;
 bool CChessBoard::m_IsOver;
 bool CChessBoard::m_IsPlayMusic;
+bool CChessBoard::m_IsStart;
 CChessOption CChessBoard::m_Option;
 char * CChessBoard::m_WindowsName;
 vector<Point> CChessBoard::m_Panel;
@@ -47,16 +50,30 @@ void CChessBoard::OnMouse(int event, int x, int y, int flags, void *param)
 {
 	int i = 0,j = 0;
 	if (event == CV_EVENT_LBUTTONDOWN && !m_IsOver &&
-		x>20 && x<628 && y>30 && y<659 )
-	{		
+		x>251 && x<386 && y>245 && y<311 && !m_IsStart)
+	{
+		m_IsStart = true;
+	/*	while(true)
+		{
+			ChangeToGame();
+		}*/
+	}
+	else if (event == CV_EVENT_LBUTTONDOWN && !m_IsOver &&
+		x>251 && x<386 && y>377 && y<443 && !m_IsStart)
+	{
+		m_IsStart = false;
+		exit(0);
+	}
+	if (event == CV_EVENT_LBUTTONDOWN && !m_IsOver &&
+		x>20 && x<628 && y>30 && y<659 && m_IsStart)
+	{
 		//i和j为鼠标点击的地方所在矩阵的坐标值
 		printf("%d  %d\n",x,y);
 		i = abs(y - 50 + 36)/67;
 		j = abs(x - 50 + 33)/66;
 		//attention ：这里i，j对于数组来说i是行，j是列，对于棋盘来说，同样i是行，j是列
 		printf("%d  %d\n",i,j);
-		
-		
+
 		int prex ,prey;
 		for (prex = 0;prex<10;prex++)
 		{
@@ -138,7 +155,6 @@ void CChessBoard::OnMouse(int event, int x, int y, int flags, void *param)
 					m_Panel.push_back(*qipan);
 					//红吃
 					sndPlaySound(".\\Sounds\\CAPTURE.WAV",SND_ASYNC);
-					
 				}
 			}
 			else
@@ -172,6 +188,7 @@ void CChessBoard::OnMouse(int event, int x, int y, int flags, void *param)
 			}
 			printf("\n");
 		}
+		printf("%d\t%d\n",x,y);
 	}
 	else if (x<20 && y<30 && (event == CV_EVENT_LBUTTONDOWN || event==CV_EVENT_LBUTTONUP))
 	{
@@ -229,10 +246,17 @@ void CChessBoard::OnMouse(int event, int x, int y, int flags, void *param)
 		else StopMusic();
 		printf("%d %d\n",x,y);
 	}
+	//测试代码，输出点击坐标
+	if (CV_EVENT_LBUTTONUP==event)
+	{
+		printf("%d %d\n",x,y);
+	}
+	
 }
 
 void CChessBoard::InitChessBoard(char *pWindowsName,IplImage *pBack,IplImage **pImg,IplImage **pImgChoosed,
-		IplImage **pRePlay,IplImage **pRegret,IplImage **pSound,IplImage **pReload)
+		IplImage **pRePlay,IplImage **pRegret,IplImage **pSound,IplImage **pReload,IplImage*pStartBack,
+		IplImage **pStartImage,IplImage **pExitImage)
 {
 	int i = 0,j = 0;
 	qipan = new Point;
@@ -249,12 +273,28 @@ void CChessBoard::InitChessBoard(char *pWindowsName,IplImage *pBack,IplImage **p
 	m_ChessPiecesImgChoosed = pImgChoosed;
 	m_Back = pBack;
 	m_IsPlayMusic = true;
+	m_IsStart = false;
+	m_StartBack = pStartBack;
+	m_StartImage = pStartImage;
+	m_ExitImage = pExitImage;
+	m_Insist = 0;
 	cvSetMouseCallback(m_WindowsName, OnMouse);
 	//DrawBorad();
+
+
+	uchar bS = CV_IMAGE_ELEM(m_StartBack,uchar,i,j*3);
+	uchar gS = CV_IMAGE_ELEM(m_StartBack,uchar,i,j*3+1);
+	uchar rS = CV_IMAGE_ELEM(m_StartBack,uchar,i,j*3+2);
+	
+	uchar bB = CV_IMAGE_ELEM(m_Back,uchar,i,j*3);
+	uchar gB = CV_IMAGE_ELEM(m_Back,uchar,i,j*3+1);
+	uchar rB = CV_IMAGE_ELEM(m_Back,uchar,i,j*3+2);
 }
 
 void CChessBoard::DrawBorad()
 {
+	if (m_IsStart)
+	{
 	
 	int i,j,x = -1,y = -1;
 	for (i = 0;i < 10;i++)
@@ -345,6 +385,8 @@ void CChessBoard::DrawBorad()
 		m_Option.InitOption(m_Reload[0],670,608);
 	}
 	m_Option.Draw2Back(m_Back);
+
+	}
 }
 void CChessBoard::WinTheGame()
 {
@@ -445,8 +487,7 @@ void CChessBoard::InitQiPan()
 }
 
 void CChessBoard::InitBackGroundSound()
-{
-	
+{	
 	m_hMCI = MCIWndCreate(NULL, NULL, WS_POPUP | WS_VISIBLE | MCIWNDF_NOPLAYBAR | MCIWNDF_NOMENU, ".//sounds//PINGSHANLUOYAN.WAV");
 	MCIWndPlay(m_hMCI);
 }
@@ -461,4 +502,40 @@ void CChessBoard::PlayMusic()
 void CChessBoard::StopMusic()
 {
 	MCIWndStop(m_hMCI);
+}
+
+void CChessBoard::DrawStart()
+{
+	if (!m_IsStart)
+	{
+		m_Option.InitOption(m_StartImage[0],251,245);
+		m_Option.Draw2Back(m_StartBack);
+		
+		m_Option.InitOption(m_ExitImage[0],386,245);
+		m_Option.Draw2Back(m_StartBack);
+	}
+}
+
+void CChessBoard::ChangeToGame()
+{
+	for (int i = 0; i<m_StartBack->height;i++)
+	{
+		for (int j = 0;j<m_StartBack->width;j++)
+		{
+	
+			
+			CV_IMAGE_ELEM(m_StartBack,uchar,i,j*3) = CV_IMAGE_ELEM(m_StartBack,uchar,i,j*3)*m_Insist/100;
+				//+ CV_IMAGE_ELEM(m_Back,uchar,i,j*3)*(100-m_Insist)/100;
+			CV_IMAGE_ELEM(m_StartBack,uchar,i,j*3+1) = CV_IMAGE_ELEM(m_StartBack,uchar,i,j*3+1)*m_Insist/100;
+				//+ CV_IMAGE_ELEM(m_Back,uchar,i,j*3+1)*(100-m_Insist)/100;
+			CV_IMAGE_ELEM(m_StartBack,uchar,i,j*3+2) = CV_IMAGE_ELEM(m_StartBack,uchar,i,j*3+2)*m_Insist/100;
+			//	+ CV_IMAGE_ELEM(m_Back,uchar,i,j*3+2)*(100-m_Insist)/100;
+		}
+	}
+	cvShowImage(m_WindowsName,m_StartBack);
+	if (m_Insist<100)
+	{
+		m_Insist= m_Insist +1;
+	}
+	
 }
