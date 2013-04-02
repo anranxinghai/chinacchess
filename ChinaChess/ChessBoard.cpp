@@ -24,9 +24,12 @@ uchar CChessBoard::gB;
 uchar CChessBoard::gS;
 uchar CChessBoard::rS;
 uchar CChessBoard::rB;
-
 IplImage *CChessBoard::m_Back;
 IplImage *CChessBoard::m_StartBack;
+
+bool CChessBoard::m_IsSave;
+void CChessBoard::GetQiPan();
+void CChessBoard::SaveToFile();
 float CChessBoard::m_Insist;
 Point *CChessBoard::qipan;
 CChessPieces CChessBoard::m_ChessPieces;
@@ -64,9 +67,9 @@ void CChessBoard::OnMouse(int event, int x, int y, int flags, void *param)
 		m_IsStart = true;
 		/*while(m_Insist<50)
 		{
-			
-				ChangeToGame();
-		}*/
+		
+		  ChangeToGame();
+	}*/
 		//延时1秒
 		Sleep(1000);
 	}
@@ -85,7 +88,7 @@ void CChessBoard::OnMouse(int event, int x, int y, int flags, void *param)
 		j = abs(x - 50 + 33)/66;
 		//attention ：这里i，j对于数组来说i是行，j是列，对于棋盘来说，同样i是行，j是列
 		printf("%d  %d\n",i,j);
-
+		
 		int prex ,prey;
 		for (prex = 0;prex<10;prex++)
 		{
@@ -133,6 +136,7 @@ void CChessBoard::OnMouse(int event, int x, int y, int flags, void *param)
 			{
 				if (m_ChessPieces.MoveRedPieces(qipan,i,j,m_IsRedPieces))
 				{
+					m_IsSave=false;
 					m_Panel.push_back(*qipan);
 					//红移
 					sndPlaySound(".\\Sounds\\MOVE.WAV",SND_ASYNC);
@@ -146,6 +150,7 @@ void CChessBoard::OnMouse(int event, int x, int y, int flags, void *param)
 				
 				if (m_ChessPieces.MoveBlackPieces(qipan,i,j,m_IsRedPieces))
 				{
+					m_IsSave=false;
 					m_Panel.push_back(*qipan);
 					//黑移
 					sndPlaySound(".\\Sounds\\MOVE2.WAV",SND_ASYNC);
@@ -164,6 +169,7 @@ void CChessBoard::OnMouse(int event, int x, int y, int flags, void *param)
 			{
 				if (m_ChessPieces.MoveRedPieces(qipan,i,j,m_IsRedPieces))
 				{
+					m_IsSave=false;
 					m_Panel.push_back(*qipan);
 					//红吃
 					sndPlaySound(".\\Sounds\\CAPTURE.WAV",SND_ASYNC);
@@ -173,6 +179,7 @@ void CChessBoard::OnMouse(int event, int x, int y, int flags, void *param)
 			{
 				if (m_ChessPieces.MoveBlackPieces(qipan,i,j,m_IsRedPieces))
 				{
+					m_IsSave=false;
 					m_Panel.push_back(*qipan);
 					//黑吃
 					sndPlaySound(".\\Sounds\\CAPTURE2.WAV",SND_ASYNC);
@@ -208,7 +215,7 @@ void CChessBoard::OnMouse(int event, int x, int y, int flags, void *param)
 		//cvShowImage(m_WindowsName,NULL);
 		if (event == CV_EVENT_LBUTTONUP && x<20 && y<30 )
 		{
-		//	m_Option.m_IsSelected = false;
+			//	m_Option.m_IsSelected = false;
 			if (IDYES == MessageBox(NULL,"是否重新开始！", "中国象棋", MB_YESNO))
 			{
 				InitQiPan();
@@ -217,7 +224,7 @@ void CChessBoard::OnMouse(int event, int x, int y, int flags, void *param)
 			}
 		}
 	}
-
+	
 	else if(x>608 && y<30 && event==CV_EVENT_LBUTTONUP)
 	{
 		if(m_Panel.size()<=0) return;
@@ -239,7 +246,7 @@ void CChessBoard::OnMouse(int event, int x, int y, int flags, void *param)
 		m_Panel.pop_back();
 		point = m_Panel.end()-1;
 		qipan = point;
-
+		
 		if (m_Panel.size()<1)
 		{
 			InitQiPan();
@@ -258,6 +265,25 @@ void CChessBoard::OnMouse(int event, int x, int y, int flags, void *param)
 		else StopMusic();
 		printf("%d %d\n",x,y);
 	}
+	else if (x>608,y>670 && event==CV_EVENT_LBUTTONUP)
+	{
+		if (m_IsSave)
+		{
+			if (IDYES == MessageBox(NULL,"是否恢复棋局！", "中国象棋", MB_YESNO))
+			{
+				GetQiPan();
+			}
+		
+		}
+		else{
+			if (IDYES == MessageBox(NULL,"是否保存棋局！", "中国象棋", MB_YESNO))
+			{
+				SaveToFile();
+			}
+			
+		}
+		
+	}
 	//测试代码，输出点击坐标
 	if (CV_EVENT_LBUTTONUP==event)
 	{
@@ -267,15 +293,22 @@ void CChessBoard::OnMouse(int event, int x, int y, int flags, void *param)
 }
 
 void CChessBoard::InitChessBoard(char *pWindowsName,IplImage *pBack,IplImage **pImg,IplImage **pImgChoosed,
-		IplImage **pRePlay,IplImage **pRegret,IplImage **pSound,IplImage **pReload,IplImage*pStartBack,
-		IplImage **pStartImage,IplImage **pExitImage)
+								 IplImage **pRePlay,IplImage **pRegret,IplImage **pSound,IplImage **pReload,IplImage*pStartBack,
+								 IplImage **pStartImage,IplImage **pExitImage)
 {
 	int i = 0,j = 0;
 	qipan = new Point;
 	InitQiPan();
-//	m_IsRedPieces = true;
+	//	m_IsRedPieces = true;
+	m_IsSave = false;
+	FILE *fp =  fopen("save.txt","rb");
+	if (fp!=NULL)
+	{
+		fread(&m_IsSave,sizeof(bool),1,fp);
+	}
+	fclose(fp);
 	m_IsOver = false;
-
+	
 	m_WindowsName = pWindowsName;
 	m_RePlay = pRePlay;
 	m_Regret = pRegret;
@@ -292,7 +325,7 @@ void CChessBoard::InitChessBoard(char *pWindowsName,IplImage *pBack,IplImage **p
 	m_Insist = 0;
 	cvSetMouseCallback(m_WindowsName, OnMouse);
 	//DrawBorad();
-
+	
 	bS = CV_IMAGE_ELEM(m_StartBack,uchar,i,j*3);
 	gS = CV_IMAGE_ELEM(m_StartBack,uchar,i,j*3+1);
 	rS = CV_IMAGE_ELEM(m_StartBack,uchar,i,j*3+2);
@@ -306,97 +339,107 @@ void CChessBoard::DrawBorad()
 {
 	if (m_IsStart)
 	{
-	
-	int i,j,x = -1,y = -1;
-	for (i = 0;i < 10;i++)
-	{
-		for (j = 0;j < 9;j++)
+		
+		int i,j,x = -1,y = -1;
+		for (i = 0;i < 10;i++)
 		{
-			if (qipan->point[i][j] >= 1 && qipan->point[i][j] <= 7)
+			for (j = 0;j < 9;j++)
 			{
-				if (!qipan->isChecked[i][j])
+				if (qipan->point[i][j] >= 1 && qipan->point[i][j] <= 7)
 				{
-					m_ChessPieces.InitChessPieces(m_ChessPiecesImg[qipan->point[i][j] - 1],i,j);
-					m_ChessPieces.Draw2Back(m_Back);
+					if (!qipan->isChecked[i][j])
+					{
+						m_ChessPieces.InitChessPieces(m_ChessPiecesImg[qipan->point[i][j] - 1],i,j);
+						m_ChessPieces.Draw2Back(m_Back);
+					}
+					else
+					{
+						x = i;
+						y = j;
+					}
 				}
-				else
+				else if (qipan->point[i][j] <= -1 && qipan->point[i][j] >= -7)
 				{
-					x = i;
-					y = j;
+					if (!qipan->isChecked[i][j])
+					{
+						m_ChessPieces.InitChessPieces(m_ChessPiecesImg[qipan->point[i][j]*(-1) + 6],i,j);
+						m_ChessPieces.Draw2Back(m_Back);
+					}
+					else
+					{
+						x = i;
+						y = j;
+					}
 				}
 			}
-			else if (qipan->point[i][j] <= -1 && qipan->point[i][j] >= -7)
+		}
+		//将选中的棋子最后绘制，实现选中棋子在其他棋子之上的感觉
+		if (qipan->point[x][y] >= 1 && qipan->point[x][y] <= 7)
+		{
+			if (qipan->isChecked[x][y])
 			{
-				if (!qipan->isChecked[i][j])
-				{
-					m_ChessPieces.InitChessPieces(m_ChessPiecesImg[qipan->point[i][j]*(-1) + 6],i,j);
-					m_ChessPieces.Draw2Back(m_Back);
-				}
-				else
-				{
-					x = i;
-					y = j;
-				}
+				m_ChessPieces.InitChessChoosedPieces(m_ChessPiecesImgChoosed[qipan->point[x][y] - 1],x,y);
+				m_ChessPieces.Draw2Back(m_Back);
 			}
 		}
-	}
-	//将选中的棋子最后绘制，实现选中棋子在其他棋子之上的感觉
-	if (qipan->point[x][y] >= 1 && qipan->point[x][y] <= 7)
-	{
-		if (qipan->isChecked[x][y])
+		else if (qipan->point[x][y] <= -1 && qipan->point[x][y] >= -7)
 		{
-			m_ChessPieces.InitChessChoosedPieces(m_ChessPiecesImgChoosed[qipan->point[x][y] - 1],x,y);
-			m_ChessPieces.Draw2Back(m_Back);
+			if (qipan->isChecked[x][y])
+			{
+				m_ChessPieces.InitChessChoosedPieces(m_ChessPiecesImgChoosed[qipan->point[x][y]*(-1) + 6],x,y);
+				m_ChessPieces.Draw2Back(m_Back);
+			}
 		}
-	}
-	else if (qipan->point[x][y] <= -1 && qipan->point[x][y] >= -7)
-	{
-		if (qipan->isChecked[x][y])
+		if(m_Option.m_IsSelected)
 		{
-			m_ChessPieces.InitChessChoosedPieces(m_ChessPiecesImgChoosed[qipan->point[x][y]*(-1) + 6],x,y);
-			m_ChessPieces.Draw2Back(m_Back);
+			m_Option.InitOption(m_RePlay[1],0,0);
 		}
-	}
-	if(m_Option.m_IsSelected)
-	{
-		m_Option.InitOption(m_RePlay[1],0,0);
-	}
-	else
-	{
-		m_Option.InitOption(m_RePlay[0],0,0);
-	}
-	m_Option.Draw2Back(m_Back);
+		else
+		{
+			m_Option.InitOption(m_RePlay[0],0,0);
+		}
+		m_Option.Draw2Back(m_Back);
+		
+		if(m_Option.m_IsSelected)
+		{
+			m_Option.InitOption(m_Regret[1],0,608);
+		}
+		else
+		{
+			m_Option.InitOption(m_Regret[0],0,608);
+		}
+		m_Option.Draw2Back(m_Back);
+		
+		if(m_Option.m_IsSelected)
+		{
+			m_Option.InitOption(m_Sound[1],670,0);
+		}
+		else
+		{
+			m_Option.InitOption(m_Sound[0],670,0);
+		}
+		m_Option.Draw2Back(m_Back);
+		
+		if (m_Option.m_IsSelected)
+		{
+			m_Option.InitOption(m_Reload[1],670,608);
+		}
+		else
+		{
+			m_Option.InitOption(m_Reload[0],670,608);
+		}
+		m_Option.Draw2Back(m_Back);
 
-	if(m_Option.m_IsSelected)
-	{
-		m_Option.InitOption(m_Regret[1],0,608);
-	}
-	else
-	{
-		m_Option.InitOption(m_Regret[0],0,608);
-	}
-	m_Option.Draw2Back(m_Back);
-
-	if(m_Option.m_IsSelected)
-	{
-		m_Option.InitOption(m_Sound[1],670,0);
-	}
-	else
-	{
-		m_Option.InitOption(m_Sound[0],670,0);
-	}
-	m_Option.Draw2Back(m_Back);
-
-	if (m_Option.m_IsSelected)
-	{
-		m_Option.InitOption(m_Reload[1],670,608);
-	}
-	else
-	{
-		m_Option.InitOption(m_Reload[0],670,608);
-	}
-	m_Option.Draw2Back(m_Back);
-
+		/*if (m_Option.m_IsSelected)
+		{
+			m_Option.InitOption(m_Reload[1],670,500);
+		}
+		else
+		{
+			m_Option.InitOption(m_Reload[0],670,500);
+		}
+		m_Option.Draw2Back(m_Back);*/
+		
 	}
 }
 void CChessBoard::WinTheGame()
@@ -482,7 +525,7 @@ void CChessBoard::InitQiPan()
 	
 	qipan->point[9][0] = BLACKJU; qipan->point[9][1] = BLACKMA; qipan->point[9][2] = BLACKXIANG;qipan->point[9][3] = BLACKSHI;qipan->point[9][4] =  BLACKJIANG;
 	qipan->point[9][5] = BLACKSHI;qipan->point[9][6] = BLACKXIANG;qipan->point[9][7] = BLACKMA;qipan->point[9][8] = BLACKJU;
-
+	
 	for (int i =0; i<10;i++)
 	{
 		for (int j= 0;j < 9;j++)
@@ -534,19 +577,61 @@ void CChessBoard::ChangeToGame()
 	{
 		for (int j = 0;j<m_StartBack->width;j++)
 		{
-	
+			
 			
 			CV_IMAGE_ELEM( m_Back, uchar, j, i*3 + 0 ) = CV_IMAGE_ELEM( m_Back, uchar, j, i*3 + 0 )*(m_Insist)/100;// + rB*(100-m_Insist)/100;
 			CV_IMAGE_ELEM( m_Back, uchar, j, i*3 + 1 ) = CV_IMAGE_ELEM( m_Back, uchar, j, i*3 + 1 )*(m_Insist)/100 ;//+ gB*(100-m_Insist)/100;
 			CV_IMAGE_ELEM( m_Back, uchar, j, i*3 + 2 ) = CV_IMAGE_ELEM( m_Back, uchar, j, i*3 + 2 )*(m_Insist)/100 ;//+ rB*(100-m_Insist)/100;
 		}
 	}
- 	cvNamedWindow("Chess",1);
- 	cvShowImage("Chess",m_Back);
+	cvNamedWindow("Chess",1);
+	cvShowImage("Chess",m_Back);
 	if (m_Insist<50)
 	{
 		Sleep(10);
 		m_Insist= m_Insist +1;
 	}
 	
+}
+
+void CChessBoard::SaveToFile()
+{
+	FILE *fp;
+	if ((fp=fopen("save.txt", "wb")) ==NULL )
+	{
+		printf("cannot open this file\n");
+		exit(0);
+	}
+	m_IsSave = !m_IsSave;
+	fwrite(&m_IsSave,sizeof(bool),1,fp);
+	for (int i = 0;i<10;i++)
+	{
+		fwrite(qipan->point[i],9*sizeof(int),1,fp);
+	}
+	
+	
+	printf("save success\n");
+
+	fclose(fp);
+
+}
+
+void CChessBoard::GetQiPan()
+{
+	FILE *fp;
+	if ((fp=fopen("save.txt", "rb")) ==NULL )
+	{
+		printf("cannot open this file\n");
+		exit(0);
+	}
+	m_IsSave = !m_IsSave;
+	fread(&m_IsSave,sizeof(bool),1,fp);
+	for (int i = 0;i<10;i++)
+	{
+		fread(qipan->point[i],9*sizeof(int),1,fp);	
+	}
+	
+	printf("get success\n");
+	fclose(fp);
+
 }
