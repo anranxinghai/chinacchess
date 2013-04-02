@@ -16,6 +16,12 @@ using std::vector;
 class CChessBoard  
 {
 public:
+	static uchar rB;
+	static uchar gB;
+	static uchar bB;
+	static uchar rS;
+	static uchar gS;
+	static uchar bS;
 	static float m_Insist;
 	CvPoint m_Position;
 	static void ChangeToGame();
@@ -41,7 +47,7 @@ public:
 	void DrawBorad();
 	IplImage ** m_ChessPiecesImg;
 	IplImage ** m_ChessPiecesImgChoosed;
- 	IplImage * m_Back;
+ 	static IplImage * m_Back;
 	IplImage ** m_RePlay;
 	IplImage ** m_Regret;
 	IplImage ** m_Sound;
