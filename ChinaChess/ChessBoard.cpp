@@ -18,19 +18,20 @@ using std::vector;
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
+/*
 uchar CChessBoard::bB;
 uchar CChessBoard::bS;
 uchar CChessBoard::gB;
 uchar CChessBoard::gS;
 uchar CChessBoard::rS;
-uchar CChessBoard::rB;
+uchar CChessBoard::rB;*/
 IplImage *CChessBoard::m_Back;
 IplImage *CChessBoard::m_StartBack;
 
 bool CChessBoard::m_IsSave;
 void CChessBoard::GetQiPan();
 void CChessBoard::SaveToFile();
-float CChessBoard::m_Insist;
+/*float CChessBoard::m_Insist;*/
 Point *CChessBoard::qipan;
 CChessPieces CChessBoard::m_ChessPieces;
 bool CChessBoard::m_IsRedPieces;
@@ -322,9 +323,10 @@ void CChessBoard::InitChessBoard(char *pWindowsName,IplImage *pBack,IplImage **p
 	m_StartBack = pStartBack;
 	m_StartImage = pStartImage;
 	m_ExitImage = pExitImage;
-	m_Insist = 0;
+// 	m_Insist = 0;
 	cvSetMouseCallback(m_WindowsName, OnMouse);
 	//DrawBorad();
+/*
 	
 	bS = CV_IMAGE_ELEM(m_StartBack,uchar,i,j*3);
 	gS = CV_IMAGE_ELEM(m_StartBack,uchar,i,j*3+1);
@@ -333,6 +335,7 @@ void CChessBoard::InitChessBoard(char *pWindowsName,IplImage *pBack,IplImage **p
 	bB = CV_IMAGE_ELEM(m_Back,uchar,i,j*3);
 	gB = CV_IMAGE_ELEM(m_Back,uchar,i,j*3+1);
 	rB = CV_IMAGE_ELEM(m_Back,uchar,i,j*3+2);
+*/
 }
 
 void CChessBoard::DrawBorad()
@@ -571,28 +574,28 @@ void CChessBoard::DrawStart()
 }
 
 //此函数值起到了延时的功能,但是被取消。
-void CChessBoard::ChangeToGame()
-{
-	for (int i = 0; i<m_StartBack->height;i++)
-	{
-		for (int j = 0;j<m_StartBack->width;j++)
-		{
-			
-			
-			CV_IMAGE_ELEM( m_Back, uchar, j, i*3 + 0 ) = CV_IMAGE_ELEM( m_Back, uchar, j, i*3 + 0 )*(m_Insist)/100;// + rB*(100-m_Insist)/100;
-			CV_IMAGE_ELEM( m_Back, uchar, j, i*3 + 1 ) = CV_IMAGE_ELEM( m_Back, uchar, j, i*3 + 1 )*(m_Insist)/100 ;//+ gB*(100-m_Insist)/100;
-			CV_IMAGE_ELEM( m_Back, uchar, j, i*3 + 2 ) = CV_IMAGE_ELEM( m_Back, uchar, j, i*3 + 2 )*(m_Insist)/100 ;//+ rB*(100-m_Insist)/100;
-		}
-	}
-	cvNamedWindow("Chess",1);
-	cvShowImage("Chess",m_Back);
-	if (m_Insist<50)
-	{
-		Sleep(10);
-		m_Insist= m_Insist +1;
-	}
-	
-}
+//DEL void CChessBoard::ChangeToGame()
+//DEL {
+//DEL 	for (int i = 0; i<m_StartBack->height;i++)
+//DEL 	{
+//DEL 		for (int j = 0;j<m_StartBack->width;j++)
+//DEL 		{
+//DEL 			
+//DEL 			
+//DEL 			CV_IMAGE_ELEM( m_Back, uchar, j, i*3 + 0 ) = CV_IMAGE_ELEM( m_Back, uchar, j, i*3 + 0 )*(m_Insist)/100;// + rB*(100-m_Insist)/100;
+//DEL 			CV_IMAGE_ELEM( m_Back, uchar, j, i*3 + 1 ) = CV_IMAGE_ELEM( m_Back, uchar, j, i*3 + 1 )*(m_Insist)/100 ;//+ gB*(100-m_Insist)/100;
+//DEL 			CV_IMAGE_ELEM( m_Back, uchar, j, i*3 + 2 ) = CV_IMAGE_ELEM( m_Back, uchar, j, i*3 + 2 )*(m_Insist)/100 ;//+ rB*(100-m_Insist)/100;
+//DEL 		}
+//DEL 	}
+//DEL 	cvNamedWindow("Chess",1);
+//DEL 	cvShowImage("Chess",m_Back);
+//DEL 	if (m_Insist<50)
+//DEL 	{
+//DEL 		Sleep(10);
+//DEL 		m_Insist= m_Insist +1;
+//DEL 	}
+//DEL 	
+//DEL }
 
 void CChessBoard::SaveToFile()
 {

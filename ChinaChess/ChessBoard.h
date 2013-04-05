@@ -19,15 +19,6 @@ public:
 	static bool m_IsSave;
 	static void GetQiPan();
 	static void SaveToFile();
-	static uchar rB;
-	static uchar gB;
-	static uchar bB;
-	static uchar rS;
-	static uchar gS;
-	static uchar bS;
-	static float m_Insist;
-	CvPoint m_Position;
-	static void ChangeToGame();
 	void DrawStart();
 	IplImage ** m_ExitImage;
 	IplImage ** m_StartImage;
