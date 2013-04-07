@@ -16,6 +16,8 @@ using std::vector;
 class CChessBoard  
 {
 public:
+	IplImage ** m_Black;
+	IplImage** m_Red;
 	static bool m_IsSave;
 	static void GetQiPan();
 	static void SaveToFile();
@@ -49,7 +51,7 @@ public:
 	static CChessPieces m_ChessPieces;
 	void InitChessBoard(char *pWindowsName,IplImage *pBack,IplImage **pImg,IplImage **pImgChoosed,
 		IplImage **pRePlay,IplImage **pRegret,IplImage **pSound,IplImage **pReload,
-		IplImage *pStartBack,IplImage **m_StartImage,IplImage **pExitImage);
+		IplImage *pStartBack,IplImage **m_StartImage,IplImage **pExitImage,IplImage **pRed,IplImage **pBlack);
 	CChessBoard();
 	virtual ~CChessBoard();
 	static Point*qipan;
