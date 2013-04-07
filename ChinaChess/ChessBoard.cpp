@@ -295,7 +295,7 @@ void CChessBoard::OnMouse(int event, int x, int y, int flags, void *param)
 
 void CChessBoard::InitChessBoard(char *pWindowsName,IplImage *pBack,IplImage **pImg,IplImage **pImgChoosed,
 								 IplImage **pRePlay,IplImage **pRegret,IplImage **pSound,IplImage **pReload,IplImage*pStartBack,
-								 IplImage **pStartImage,IplImage **pExitImage)
+								 IplImage **pStartImage,IplImage **pExitImage,IplImage **pRed,IplImage **pBlack)
 {
 	int i = 0,j = 0;
 	qipan = new Point;
@@ -323,6 +323,8 @@ void CChessBoard::InitChessBoard(char *pWindowsName,IplImage *pBack,IplImage **p
 	m_StartBack = pStartBack;
 	m_StartImage = pStartImage;
 	m_ExitImage = pExitImage;
+	m_Red = pRed;
+	m_Black = pBlack;
 // 	m_Insist = 0;
 	cvSetMouseCallback(m_WindowsName, OnMouse);
 	//DrawBorad();
@@ -433,15 +435,21 @@ void CChessBoard::DrawBorad()
 		}
 		m_Option.Draw2Back(m_Back);
 
-		/*if (m_Option.m_IsSelected)
+		if (m_IsRedPieces)
 		{
-			m_Option.InitOption(m_Reload[1],670,500);
+			m_Option.InitOption(m_Red[1],333,341);
+			m_Option.Draw2Back(m_Back);
+			m_Option.InitOption(m_Black[0],338,280);
+			m_Option.Draw2Back(m_Back);
 		}
 		else
 		{
-			m_Option.InitOption(m_Reload[0],670,500);
+			m_Option.InitOption(m_Black[1],333,275);
+			m_Option.Draw2Back(m_Back);
+			m_Option.InitOption(m_Red[0],338,346);
+			m_Option.Draw2Back(m_Back);
 		}
-		m_Option.Draw2Back(m_Back);*/
+		
 		
 	}
 }

@@ -16,6 +16,8 @@
 class CChessGame  
 {
 public:
+	IplImage * m_Black[2];
+	IplImage * m_Red[2];
 	bool m_IsStart;
 	IplImage * m_StartBackCopy;
 	IplImage * m_StartBack;

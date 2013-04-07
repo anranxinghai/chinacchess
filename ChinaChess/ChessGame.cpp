@@ -115,7 +115,7 @@ void CChessGame::ReleaseImage()
 void CChessGame::InitChessBoard()
 {
 	m_ChessBoard.InitChessBoard(m_WindowsName,m_pImgBackCopy,m_ChessPiecesImage,m_ChessPiecesChoosedImage,
-	m_RePlay,m_Regret,m_Sound,m_Reload,m_StartBackCopy,m_StartImg,m_ExitImg);
+	m_RePlay,m_Regret,m_Sound,m_Reload,m_StartBackCopy,m_StartImg,m_ExitImg,m_Red,m_Black);
 }
 
 void CChessGame::InitImage()
@@ -149,6 +149,12 @@ void CChessGame::InitImage()
 
 	m_ExitImg[0] = cvLoadImage(".//image//exit.png");
 	m_ExitImg[1] = cvLoadImage(".//imagechoosed//exit.png");
+
+	m_Black[0] = cvLoadImage(".//image//black.png");
+	m_Black[1] = cvLoadImage(".//imagechoosed//black.png");
+
+	m_Red[0] = cvLoadImage(".//image//red.png");
+	m_Red[1] = cvLoadImage(".//imagechoosed//red.png");
 }
 
 
