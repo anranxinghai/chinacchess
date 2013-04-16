@@ -23,6 +23,7 @@ CChessOption::~CChessOption()
 //DEL 
 //DEL }
 
+//将菜单图片绘制到背景上
 void CChessOption::Draw2Back(IplImage *pBack)
 {
 	if (m_OptionImage == NULL)
@@ -48,6 +49,7 @@ void CChessOption::Draw2Back(IplImage *pBack)
 	}
 }
 
+//初始化菜单按钮
 void CChessOption::InitOption(IplImage *pImage, int x, int y)
 {
 	m_OptionImage = pImage;
