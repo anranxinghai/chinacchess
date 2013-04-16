@@ -19,6 +19,8 @@ CChessPieces::~CChessPieces()
 	
 }
 
+
+//棋子画到背景上
 void CChessPieces::Draw2Back(IplImage *pImage)
 {
 	if (m_PiecesImage == NULL)
@@ -44,6 +46,7 @@ void CChessPieces::Draw2Back(IplImage *pImage)
 	}
 }
 
+//初始化棋子
 void CChessPieces::InitChessPieces(IplImage *pImage, int x, int y)
 {
 	m_PiecesImage = pImage;
@@ -52,6 +55,8 @@ void CChessPieces::InitChessPieces(IplImage *pImage, int x, int y)
 	m_Position.x = 51 + x*m_PiecesImage->width-1.01*m_PiecesImage->width/2;
 	m_Position.y = 52 + 1.02*y*m_PiecesImage->height-m_PiecesImage->height/2;
 }
+
+//初始化被选中后的棋子
 void CChessPieces::InitChessChoosedPieces(IplImage *pImage, int x, int y)
 {
 	m_PiecesImage = pImage;
@@ -61,6 +66,7 @@ void CChessPieces::InitChessChoosedPieces(IplImage *pImage, int x, int y)
 	m_Position.y = 47 + 0.868*1.02*y*m_PiecesImage->height-0.868*m_PiecesImage->height/2;
 }
 
+//移动黑棋子
 bool CChessPieces::MoveBlackPieces(Point *qipan,int x,int y,bool &m_IsRedPieces)
 {
 	int i,j;
@@ -172,6 +178,7 @@ bool CChessPieces::MoveBlackPieces(Point *qipan,int x,int y,bool &m_IsRedPieces)
 	
 }
 
+//移动红棋子
 bool CChessPieces::MoveRedPieces(Point *qipan,int x,int y,bool &m_IsRedPieces)
 {
 	int i,j;
@@ -285,6 +292,8 @@ bool CChessPieces::MoveRedPieces(Point *qipan,int x,int y,bool &m_IsRedPieces)
 	
 	
 }
+
+//以下是各种棋子的移动
 
 bool CChessPieces::MoveMa(Point *qipan,int i, int j,int x,int y,int MA)
 {

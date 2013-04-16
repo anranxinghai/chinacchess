@@ -210,6 +210,7 @@ void CChessBoard::OnMouse(int event, int x, int y, int flags, void *param)
 		}
 		printf("%d\t%d\n",x,y);
 	}
+	//重新开始游戏
 	else if (x<20 && y<30 && (event == CV_EVENT_LBUTTONDOWN || event==CV_EVENT_LBUTTONUP))
 	{
 		//m_Option.m_IsSelected = true;
@@ -225,7 +226,7 @@ void CChessBoard::OnMouse(int event, int x, int y, int flags, void *param)
 			}
 		}
 	}
-	
+	//悔棋
 	else if(x>608 && y<30 && event==CV_EVENT_LBUTTONUP)
 	{
 		if(m_Panel.size()<=0) return;
@@ -339,7 +340,7 @@ void CChessBoard::InitChessBoard(char *pWindowsName,IplImage *pBack,IplImage **p
 	rB = CV_IMAGE_ELEM(m_Back,uchar,i,j*3+2);
 */
 }
-
+//刷新棋盘
 void CChessBoard::DrawBorad()
 {
 	if (m_IsStart)
@@ -453,6 +454,7 @@ void CChessBoard::DrawBorad()
 		
 	}
 }
+//判断输赢
 void CChessBoard::WinTheGame()
 {
 	bool isRedWin = false;
@@ -502,7 +504,7 @@ void CChessBoard::WinTheGame()
 		MessageBox(NULL,"红旗获胜！", "中国象棋", MB_OK | MB_ICONSTOP);	
 	}
 }
-
+//初始化棋盘
 void CChessBoard::InitQiPan()
 {
 	qipan->point[0][0] = REDJU;   
@@ -550,25 +552,25 @@ void CChessBoard::InitQiPan()
 	m_Panel.push_back(*qipan);	
 	m_StepNum = 0;
 }
-
+//初始化背景
 void CChessBoard::InitBackGroundSound()
 {	
 	m_hMCI = MCIWndCreate(NULL, NULL, WS_POPUP | WS_VISIBLE | MCIWNDF_NOPLAYBAR | MCIWNDF_NOMENU, ".//sounds//PINGSHANLUOYAN.WAV");
 	MCIWndPlay(m_hMCI);
 }
 
-
+//播放音乐
 
 void CChessBoard::PlayMusic()
 {
 	MCIWndPlay(m_hMCI);
 }
-
+//停止播放音乐
 void CChessBoard::StopMusic()
 {
 	MCIWndStop(m_hMCI);
 }
-
+//显示开始界面
 void CChessBoard::DrawStart()
 {
 	if (!m_IsStart)
@@ -605,6 +607,7 @@ void CChessBoard::DrawStart()
 //DEL 	
 //DEL }
 
+//保存棋盘
 void CChessBoard::SaveToFile()
 {
 	FILE *fp;
